@@ -1,0 +1,32 @@
+{
+  "name": "jnye/parcom",
+  "description": "Parser Combinator",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Joshua Nye",
+      "email": "joshua.nye@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9",
+    "phpbench/phpbench": "^0.17.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Parcom\\": "src/Parcom/"
+    }
+  },
+  "scripts": {
+    "test": [
+      "phpunit"
+    ],
+    "bench": [
+      "phpbench run benchmarks --report=aggregate --retry-threshold=2"
+    ]
+  }
+}

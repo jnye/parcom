@@ -1,0 +1,94 @@
+<?php
+
+namespace Parcom\Tests;
+
+use Parcom\Error;
+use Parcom\Span;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @covers \Parcom\Span
+ */
+class SpanTest extends TestCase
+{
+
+    public function testSliceToString()
+    {
+        $slice = new Span("aircraft");
+        self::assertEquals("aircraft", (string)$slice);
+    }
+
+    public function testSliceArrayOffsetExists()
+    {
+        $slice = new Span("abc");
+        self::assertFalse(isset($slice[-1]));
+        self::assertTrue(isset($slice[0]));
+        self::assertTrue(isset($slice[1]));
+        self::assertTrue(isset($slice[2]));
+        self::assertFalse(isset($slice[3]));
+    }
+
+    public function testSliceArrayOffsetGetInvalidIndexesUnder(){
+        $slice = new Span("abc");
+        $this->expectException(Error::class);
+        $slice[-1];
+    }
+
+    public function testSliceArrayOffsetGetInvalidIndexesOver(){
+        $slice = new Span("abc");
+        $this->expectException(Error::class);
+        $slice[3];
+    }
+
+    public function testSliceArrayOffsetGetValidIndexes()
+    {
+        $slice = new Span("abc");
+        self::assertEquals("a", (string)$slice[0]);
+        self::assertEquals("b", (string)$slice[1]);
+        self::assertEquals("c", (string)$slice[2]);
+    }
+
+    public function testSliceArrayOffsetSetNotSupported()
+    {
+        $slice = new Span("abc");
+        $this->expectException(Error::class);
+        $slice[0] = 'A';
+    }
+
+    public function testSliceArrayOffsetUnsetNotSupported()
+    {
+        $slice = new Span("abc");
+        $this->expectException(Error::class);
+        unset($slice[0]);
+    }
+
+    public function testSliceLen() {
+        $slice = new Span("");
+        self::assertEquals(0, $slice->len());
+        $slice = new Span("abc");
+        self::assertEquals(3, $slice->len());
+    }
+
+    /**
+     * @throws Error
+     */
+    public function testSliceOfSlice()
+    {
+        $slice = new Span("aircraft");
+        self::assertEquals("irc", (string)$slice->span(1, 3));
+    }
+
+    public function testSpanBadLength()
+    {
+        $this->expectException(Error::class);
+        new Span("abc", 0, 4);
+    }
+
+    public function testSpanOfSpanBadLength()
+    {
+        $this->expectException(Error::class);
+        $span = new Span("abc");
+        $span->span(0, 4);
+    }
+
+}
