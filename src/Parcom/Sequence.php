@@ -32,4 +32,19 @@ class Sequence
         };
     }
 
+    public static function terminated(callable $first, callable $second): callable
+    {
+        return function (Span $input) use ($first, $second): array {
+            [$remaining, $output, $err] = $first($input);
+            if ($err !== null) {
+                return [null, null, $err];
+            }
+            [$remaining, , $err] = $second($remaining);
+            if ($err !== null) {
+                return [null, null, $err];
+            }
+            return [$remaining, $output, null];
+        };
+    }
+
 }
