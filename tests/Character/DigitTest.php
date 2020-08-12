@@ -8,6 +8,7 @@ use Parcom\Span;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * @covers \Parcom\Character::is_space
  * @covers \Parcom\Character::is_alphabetic
  * @covers \Parcom\Character::is_alphanumeric
  * @covers \Parcom\Character::is_digit
@@ -20,6 +21,18 @@ use PHPUnit\Framework\TestCase;
  */
 class DigitTest extends TestCase
 {
+
+    public static function testIsSpace()
+    {
+        $valids = [" ", "\t"];
+        foreach ($valids as $valid) {
+            self::assertTrue(Character::is_space($valid));
+        }
+        $invalids = ["\n", "\r", 'a', 'z', '0', '9'];
+        foreach ($invalids as $invalid) {
+            self::assertFalse(Character::is_space($invalid));
+        }
+    }
 
     public static function testIsAlphanumeric()
     {

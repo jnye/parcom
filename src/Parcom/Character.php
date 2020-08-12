@@ -47,6 +47,11 @@ class Character
         };
     }
 
+    public static function is_space(string $char): bool
+    {
+        return $char === ' ' || $char === "\t";
+    }
+
     public static function is_digit(string $char): bool
     {
         return ord($char) >= ord('0') && ord($char) <= ord('9');
