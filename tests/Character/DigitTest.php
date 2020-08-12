@@ -143,4 +143,49 @@ class DigitTest extends TestCase
         self::assertNull($remaining);
     }
 
+    public function testAlphanumeric0SuccessNoMatch()
+    {
+        $input = new Span("+[]=");
+        [$remaining, $output, $err] = Character::alphanumeric0()($input);
+        self::assertNull($err);
+        self::assertEquals("", (string)$output);
+        self::assertEquals("+[]=", (string)$remaining);
+    }
+
+    public function testAlphanumeric0SuccessMatch()
+    {
+        $input = new Span("aBc123[]");
+        [$remaining, $output, $err] = Character::alphanumeric0()($input);
+        self::assertNull($err);
+        self::assertEquals("aBc123", (string)$output);
+        self::assertEquals("[]", (string)$remaining);
+    }
+
+    public function testAlphanumeric1Success()
+    {
+        $input = new Span("aBc123");
+        [$remaining, $output, $err] = Character::alphanumeric1()($input);
+        self::assertNull($err);
+        self::assertEquals("aBc123", (string)$output);
+        self::assertEquals("", (string)$remaining);
+    }
+
+    public function testAlphanumeric1SuccessWithRemainder()
+    {
+        $input = new Span("aBc123[]");
+        [$remaining, $output, $err] = Character::alphanumeric1()($input);
+        self::assertNull($err);
+        self::assertEquals("aBc123", (string)$output);
+        self::assertEquals("[]", (string)$remaining);
+    }
+
+    public function testAlphanumeric1Failure()
+    {
+        $input = new Span("+[]=");
+        [$remaining, $output, $err] = Character::alphanumeric1()($input);
+        self::assertEquals(Error::ERR_ALPHANUMERIC, $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
 }

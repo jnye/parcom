@@ -12,5 +12,6 @@ class Error extends Exception
     const ERR_TAG = "Err::Tag";
     const ERR_DIGIT = "Err::Digit";
     const ERR_ALPHABETIC = "Err::Alphabetic";
+    const ERR_ALPHANUMERIC = "Err::Alphanumeric";
 
 }
