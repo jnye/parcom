@@ -9,12 +9,25 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Parcom\Character::is_alphabetic
+ * @covers \Parcom\Character::is_alphanumeric
  * @covers \Parcom\Character::is_digit
  * @covers \Parcom\Character::digit0
  * @covers \Parcom\Character::digit1
  */
 class DigitTest extends TestCase
 {
+
+    public static function testIsAlphanumeric()
+    {
+        $valids = ['a', 'A', 'z', 'Z', 'm', 'M', '0', '9', '5'];
+        foreach ($valids as $valid) {
+            self::assertTrue(Character::is_alphanumeric($valid));
+        }
+        $invalids = ['-', '+', '.'];
+        foreach ($invalids as $invalid) {
+            self::assertFalse(Character::is_alphanumeric($invalid));
+        }
+    }
 
     public static function testIsAlphabetic()
     {

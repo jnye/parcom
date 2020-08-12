@@ -31,6 +31,11 @@ class Character
             || (ord($char) >= ord('A') && ord($char) <= ord('Z'));
     }
 
+    public static function is_alphanumeric(string $char): bool
+    {
+        return static::is_alphabetic($char) || static::is_digit($char);
+    }
+
     public static function digit1(): callable
     {
         return function (Span $input): array {
