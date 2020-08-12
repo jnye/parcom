@@ -36,7 +36,7 @@ class Span implements ArrayAccess
      */
     public function span(int $offset = 0, $length = null): self
     {
-        if ($offset + $length > $this->len()) {
+        if ($offset + $length > $this->length()) {
             throw new Error();
         }
         return new self($this->input, $this->offset + $offset, $length);
@@ -45,7 +45,7 @@ class Span implements ArrayAccess
     /**
      * @return int
      */
-    public function len(): int
+    public function length(): int
     {
         return $this->length;
     }

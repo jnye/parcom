@@ -12,7 +12,7 @@ class Bytes
     public static function take(int $count): callable
     {
         return function (Span $input) use ($count): array {
-            if ($input->len() < $count) {
+            if ($input->length() < $count) {
                 return [null, null, "Err::Eof"];
             }
             return [$input->span($count), $input->span(0, $count), null];
@@ -23,7 +23,7 @@ class Bytes
     {
         return function (Span $input) use ($tag): array {
             $tagLen = strlen($tag);
-            if ($input->len() < $tagLen) {
+            if ($input->length() < $tagLen) {
                 return [null, null, "Err::Eof"];
             }
             $peek = $input->span(0, $tagLen);

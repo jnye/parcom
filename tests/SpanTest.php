@@ -62,9 +62,9 @@ class SpanTest extends TestCase
 
     public function testSliceLen() {
         $slice = new Span("");
-        self::assertEquals(0, $slice->len());
+        self::assertEquals(0, $slice->length());
         $slice = new Span("abc");
-        self::assertEquals(3, $slice->len());
+        self::assertEquals(3, $slice->length());
     }
 
     /**
