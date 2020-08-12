@@ -1,6 +1,6 @@
 <?php
 
-namespace Parcom\Tests\Branch;
+namespace Branch;
 
 use Parcom\Branch;
 use Parcom\Bytes;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Parcom\Tests\Sequence;
+namespace Sequence;
 
 use Parcom\Bytes;
 use Parcom\Error;

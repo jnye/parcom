@@ -1,7 +1,5 @@
 <?php
 
-namespace Parcom\Tests;
-
 use Parcom\Error;
 use Parcom\Span;
 use PHPUnit\Framework\TestCase;

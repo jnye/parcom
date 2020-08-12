@@ -1,6 +1,6 @@
 <?php
 
-namespace Parcom\Tests\Bytes;
+namespace Bytes;
 
 use Parcom\Bytes;
 use Parcom\Error;

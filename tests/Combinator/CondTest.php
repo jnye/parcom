@@ -1,6 +1,6 @@
 <?php
 
-namespace Parcom\Tests\Combinator;
+namespace Combinator;
 
 use Parcom\Bytes;
 use Parcom\Combinator;
