@@ -26,4 +26,15 @@ class Combinator
         };
     }
 
+    public static function peek(callable $parser): callable
+    {
+        return function (Span $input) use ($parser) {
+            [$remaining, $output, $err] = $parser($input);
+            if ($err !== null) {
+                return [null, null, $err];
+            }
+            return [$input, $output, null];
+        };
+    }
+
 }
