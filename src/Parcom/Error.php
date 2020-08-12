@@ -11,5 +11,6 @@ class Error extends Exception
     const ERR_PERMUTATION = "Err::Permutation";
     const ERR_TAG = "Err::Tag";
     const ERR_DIGIT = "Err::Digit";
+    const ERR_ALPHABETIC = "Err::Alphabetic";
 
 }

@@ -98,4 +98,49 @@ class DigitTest extends TestCase
         self::assertNull($remaining);
     }
 
+    public function testAlpha0SuccessNoMatch()
+    {
+        $input = new Span("123");
+        [$remaining, $output, $err] = Character::alpha0()($input);
+        self::assertNull($err);
+        self::assertEquals("", (string)$output);
+        self::assertEquals("123", (string)$remaining);
+    }
+
+    public function testAlpha0SuccessMatch()
+    {
+        $input = new Span("aBc123");
+        [$remaining, $output, $err] = Character::alpha0()($input);
+        self::assertNull($err);
+        self::assertEquals("aBc", (string)$output);
+        self::assertEquals("123", (string)$remaining);
+    }
+
+    public function testAlpha1Success()
+    {
+        $input = new Span("aBc");
+        [$remaining, $output, $err] = Character::alpha1()($input);
+        self::assertNull($err);
+        self::assertEquals("aBc", (string)$output);
+        self::assertEquals("", (string)$remaining);
+    }
+
+    public function testAlpha1SuccessWithRemainder()
+    {
+        $input = new Span("aBc123");
+        [$remaining, $output, $err] = Character::alpha1()($input);
+        self::assertNull($err);
+        self::assertEquals("aBc", (string)$output);
+        self::assertEquals("123", (string)$remaining);
+    }
+
+    public function testAlpha1Failure()
+    {
+        $input = new Span("123aBc");
+        [$remaining, $output, $err] = Character::alpha1()($input);
+        self::assertEquals(Error::ERR_ALPHABETIC, $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
 }
