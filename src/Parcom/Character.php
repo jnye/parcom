@@ -7,58 +7,22 @@ class Character
 
     public static function digit0(): callable
     {
-        return function (Span $input): array {
-            $count = 0;
-            $offset = $input->offset();
-            $max = $offset + $input->length();
-            while ($offset < $max && self::is_digit($input[$offset])) {
-                $offset++;
-                $count++;
-            }
-            return [$input->span($count), $input->span(0, $count), null];
-        };
+        return static::zeroOrMore([static::class, 'is_digit']);
     }
 
     public static function alpha0(): callable
     {
-        return function (Span $input): array {
-            $count = 0;
-            $offset = $input->offset();
-            $max = $offset + $input->length();
-            while ($offset < $max && self::is_alphabetic($input[$offset])) {
-                $offset++;
-                $count++;
-            }
-            return [$input->span($count), $input->span(0, $count), null];
-        };
+        return static::zeroOrMore([static::class, 'is_alphabetic']);
     }
 
     public static function alphanumeric0(): callable
     {
-        return function (Span $input): array {
-            $count = 0;
-            $offset = $input->offset();
-            $max = $offset + $input->length();
-            while ($offset < $max && self::is_alphanumeric($input[$offset])) {
-                $offset++;
-                $count++;
-            }
-            return [$input->span($count), $input->span(0, $count), null];
-        };
+        return static::zeroOrMore([static::class, 'is_alphanumeric']);
     }
 
     public static function space0(): callable
     {
-        return function (Span $input): array {
-            $count = 0;
-            $offset = $input->offset();
-            $max = $offset + $input->length();
-            while ($offset < $max && self::is_space($input[$offset])) {
-                $offset++;
-                $count++;
-            }
-            return [$input->span($count), $input->span(0, $count), null];
-        };
+        return static::zeroOrMore([static::class, 'is_space']);
     }
 
     public static function is_space(string $char): bool
@@ -85,71 +49,53 @@ class Character
 
     public static function digit1(): callable
     {
-        return function (Span $input): array {
-            $count = 0;
-            $offset = $input->offset();
-            $max = $offset + $input->length() - 1;
-            while ($offset <= $max && self::is_digit($input[$count])) {
-                $offset++;
-                $count++;
-            }
-            if ($count == 0) {
-                return [null, null, Error::ERR_DIGIT];
-            }
-            return [$input->span($count), $input->span(0, $count), null];
-        };
+        return static::oneOrMore([static::class, 'is_digit'], Error::ERR_DIGIT);
     }
 
     public static function alpha1(): callable
     {
-        return function (Span $input): array {
-            $count = 0;
-            $offset = $input->offset();
-            $max = $offset + $input->length() - 1;
-            while ($offset <= $max && self::is_alphabetic($input[$count])) {
-                $offset++;
-                $count++;
-            }
-            if ($count == 0) {
-                return [null, null, Error::ERR_ALPHABETIC];
-            }
-            return [$input->span($count), $input->span(0, $count), null];
-        };
+        return static::oneOrMore([static::class, 'is_alphabetic'], Error::ERR_ALPHABETIC);
     }
 
     public static function alphanumeric1(): callable
     {
-        return function (Span $input): array {
-            $count = 0;
-            $offset = $input->offset();
-            $max = $offset + $input->length() - 1;
-            while ($offset <= $max && self::is_alphanumeric($input[$count])) {
-                $offset++;
-                $count++;
-            }
-            if ($count == 0) {
-                return [null, null, Error::ERR_ALPHANUMERIC];
-            }
-            return [$input->span($count), $input->span(0, $count), null];
-        };
+        return static::oneOrMore([static::class, 'is_alphanumeric'], Error::ERR_ALPHANUMERIC);
     }
 
     public static function space1(): callable
     {
-        return function (Span $input): array {
+        return static::oneOrMore([static::class, 'is_space'], Error::ERR_SPACE);
+    }
+
+    private static function oneOrMore(array $userFunction, string $err): callable
+    {
+        return function (Span $input) use ($userFunction, $err): array {
             $count = 0;
             $offset = $input->offset();
             $max = $offset + $input->length() - 1;
-            while ($offset <= $max && self::is_space($input[$count])) {
+            while ($offset <= $max && call_user_func($userFunction, $input[$count])) {
                 $offset++;
                 $count++;
             }
             if ($count == 0) {
-                return [null, null, Error::ERR_SPACE];
+                return [null, null, $err];
             }
             return [$input->span($count), $input->span(0, $count), null];
         };
     }
 
+    private static function zeroOrMore(array $userFunction): callable
+    {
+        return function (Span $input) use ($userFunction): array {
+            $count = 0;
+            $offset = $input->offset();
+            $max = $offset + $input->length();
+            while ($offset < $max && call_user_func($userFunction, $input[$count])) {
+                $offset++;
+                $count++;
+            }
+            return [$input->span($count), $input->span(0, $count), null];
+        };
+    }
 }
 

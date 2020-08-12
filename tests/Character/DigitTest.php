@@ -20,6 +20,8 @@ use PHPUnit\Framework\TestCase;
  * @covers \Parcom\Character::alpha1
  * @covers \Parcom\Character::alphanumeric0
  * @covers \Parcom\Character::alphanumeric1
+ * @covers \Parcom\Character::zeroOrMore
+ * @covers \Parcom\Character::oneOrMore
  */
 class DigitTest extends TestCase
 {
