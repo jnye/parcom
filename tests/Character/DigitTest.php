@@ -13,6 +13,10 @@ use PHPUnit\Framework\TestCase;
  * @covers \Parcom\Character::is_digit
  * @covers \Parcom\Character::digit0
  * @covers \Parcom\Character::digit1
+ * @covers \Parcom\Character::alpha0
+ * @covers \Parcom\Character::alpha1
+ * @covers \Parcom\Character::alphanumeric0
+ * @covers \Parcom\Character::alphanumeric1
  */
 class DigitTest extends TestCase
 {
