@@ -24,6 +24,13 @@ class Character
         return ord($char) >= ord('0') && ord($char) <= ord('9');
     }
 
+    public static function is_alphabetic(string $char): bool
+    {
+        return
+            (ord($char) >= ord('a') && ord($char) <= ord('z'))
+            || (ord($char) >= ord('A') && ord($char) <= ord('Z'));
+    }
+
     public static function digit1(): callable
     {
         return function (Span $input): array {

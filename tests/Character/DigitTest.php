@@ -8,12 +8,25 @@ use Parcom\Span;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * @covers \Parcom\Character::is_alphabetic
  * @covers \Parcom\Character::is_digit
  * @covers \Parcom\Character::digit0
  * @covers \Parcom\Character::digit1
  */
 class DigitTest extends TestCase
 {
+
+    public static function testIsAlphabetic()
+    {
+        $letters = ['a', 'A', 'z', 'Z', 'm', 'M'];
+        foreach ($letters as $letter) {
+            self::assertTrue(Character::is_alphabetic($letter));
+        }
+        $notLetters = ['-', '+', '.', '4'];
+        foreach ($notLetters as $notLetter) {
+            self::assertFalse(Character::is_alphabetic($notLetter));
+        }
+    }
 
     public static function testIsDigit()
     {
