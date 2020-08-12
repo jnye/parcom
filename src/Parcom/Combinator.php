@@ -48,4 +48,16 @@ class Combinator
         };
     }
 
+    public static function recognize(callable $parser): callable
+    {
+        return function (Span $input) use ($parser) {
+            [$remaining, $output, $err] = $parser($input);
+            if ($err !== null) {
+                return [null, null, $err];
+            }
+            $output = new Span($input->input(), $input->offset(), $output->offset() + $output->length());
+            return [$remaining, $output, null];
+        };
+    }
+
 }
