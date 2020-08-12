@@ -14,6 +14,9 @@ class SpanTest extends TestCase
     {
         $slice = new Span("aircraft");
         self::assertEquals("aircraft", (string)$slice);
+        self::assertSame(0, $slice->offset());
+        self::assertSame(8, $slice->length());
+        self::assertSame("aircraft", $slice->input());
     }
 
     public function testSliceArrayOffsetExists()

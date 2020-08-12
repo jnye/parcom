@@ -99,4 +99,14 @@ class Span implements ArrayAccess
         throw new Error("offsetUnset is not supported");
     }
 
+    public function offset(): int
+    {
+        return $this->offset;
+    }
+
+    public function input(): string
+    {
+        return $this->input;
+    }
+
 }
