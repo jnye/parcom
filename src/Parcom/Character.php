@@ -7,22 +7,22 @@ class Character
 
     public static function digit0(): callable
     {
-        return static::zeroOrMore([static::class, 'is_digit']);
+        return static::zeroOrMore([static::class, 'is_digit'], Error::ERR_DIGIT);
     }
 
     public static function alpha0(): callable
     {
-        return static::zeroOrMore([static::class, 'is_alphabetic']);
+        return static::zeroOrMore([static::class, 'is_alphabetic'], Error::ERR_ALPHABETIC);
     }
 
     public static function alphanumeric0(): callable
     {
-        return static::zeroOrMore([static::class, 'is_alphanumeric']);
+        return static::zeroOrMore([static::class, 'is_alphanumeric'], Error::ERR_ALPHANUMERIC);
     }
 
     public static function space0(): callable
     {
-        return static::zeroOrMore([static::class, 'is_space']);
+        return static::zeroOrMore([static::class, 'is_space'], Error::ERR_SPACE);
     }
 
     public static function is_space(string $char): bool
@@ -67,9 +67,9 @@ class Character
         return static::oneOrMore([static::class, 'is_space'], Error::ERR_SPACE);
     }
 
-    private static function oneOrMore(array $userFunction, string $err): callable
+    private static function minCountMatch(array $userFunction, string $err, int $minCount): callable
     {
-        return function (Span $input) use ($userFunction, $err): array {
+        return function (Span $input) use ($userFunction, $err, $minCount): array {
             $count = 0;
             $offset = $input->offset();
             $max = $offset + $input->length() - 1;
@@ -77,25 +77,22 @@ class Character
                 $offset++;
                 $count++;
             }
-            if ($count == 0) {
+            if ($minCount > 0 && $count < $minCount) {
                 return [null, null, $err];
             }
             return [$input->span($count), $input->span(0, $count), null];
         };
     }
 
-    private static function zeroOrMore(array $userFunction): callable
+    private static function oneOrMore(array $userFunction, string $err): callable
     {
-        return function (Span $input) use ($userFunction): array {
-            $count = 0;
-            $offset = $input->offset();
-            $max = $offset + $input->length();
-            while ($offset < $max && call_user_func($userFunction, $input[$count])) {
-                $offset++;
-                $count++;
-            }
-            return [$input->span($count), $input->span(0, $count), null];
-        };
+        return static::minCountMatch($userFunction, $err, 1);
     }
+
+    private static function zeroOrMore(array $userFunction, string $err): callable
+    {
+        return static::minCountMatch($userFunction, $err, 0);
+    }
+
 }
 

@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Parcom\Character::alphanumeric1
  * @covers \Parcom\Character::zeroOrMore
  * @covers \Parcom\Character::oneOrMore
+ * @covers \Parcom\Character::minCountMatch
  */
 class DigitTest extends TestCase
 {
