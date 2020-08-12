@@ -47,6 +47,20 @@ class Character
         };
     }
 
+    public static function space0(): callable
+    {
+        return function (Span $input): array {
+            $count = 0;
+            $offset = $input->offset();
+            $max = $offset + $input->length();
+            while ($offset < $max && self::is_space($input[$offset])) {
+                $offset++;
+                $count++;
+            }
+            return [$input->span($count), $input->span(0, $count), null];
+        };
+    }
+
     public static function is_space(string $char): bool
     {
         return $char === ' ' || $char === "\t";
@@ -115,6 +129,23 @@ class Character
             }
             if ($count == 0) {
                 return [null, null, Error::ERR_ALPHANUMERIC];
+            }
+            return [$input->span($count), $input->span(0, $count), null];
+        };
+    }
+
+    public static function space1(): callable
+    {
+        return function (Span $input): array {
+            $count = 0;
+            $offset = $input->offset();
+            $max = $offset + $input->length() - 1;
+            while ($offset <= $max && self::is_space($input[$count])) {
+                $offset++;
+                $count++;
+            }
+            if ($count == 0) {
+                return [null, null, Error::ERR_SPACE];
             }
             return [$input->span($count), $input->span(0, $count), null];
         };

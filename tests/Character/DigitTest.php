@@ -12,6 +12,8 @@ use PHPUnit\Framework\TestCase;
  * @covers \Parcom\Character::is_alphabetic
  * @covers \Parcom\Character::is_alphanumeric
  * @covers \Parcom\Character::is_digit
+ * @covers \Parcom\Character::space0
+ * @covers \Parcom\Character::space1
  * @covers \Parcom\Character::digit0
  * @covers \Parcom\Character::digit1
  * @covers \Parcom\Character::alpha0
@@ -201,6 +203,51 @@ class DigitTest extends TestCase
         $input = new Span("+[]=");
         [$remaining, $output, $err] = Character::alphanumeric1()($input);
         self::assertEquals(Error::ERR_ALPHANUMERIC, $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testSpace0SuccessNoMatch()
+    {
+        $input = new Span("");
+        [$remaining, $output, $err] = Character::space0()($input);
+        self::assertNull($err);
+        self::assertEquals("", (string)$output);
+        self::assertEquals("", (string)$remaining);
+    }
+
+    public function testSpace0SuccessMatch()
+    {
+        $input = new Span(" \t");
+        [$remaining, $output, $err] = Character::space0()($input);
+        self::assertNull($err);
+        self::assertEquals(" \t", (string)$output);
+        self::assertEquals("", (string)$remaining);
+    }
+
+    public function testSpace1Success()
+    {
+        $input = new Span(" \t");
+        [$remaining, $output, $err] = Character::space1()($input);
+        self::assertNull($err);
+        self::assertEquals(" \t", (string)$output);
+        self::assertEquals("", (string)$remaining);
+    }
+
+    public function testSpace1SuccessWithRemainder()
+    {
+        $input = new Span(" \ta+1");
+        [$remaining, $output, $err] = Character::space1()($input);
+        self::assertNull($err);
+        self::assertEquals(" \t", (string)$output);
+        self::assertEquals("a+1", (string)$remaining);
+    }
+
+    public function testSpace1Failure()
+    {
+        $input = new Span("a+1");
+        [$remaining, $output, $err] = Character::space1()($input);
+        self::assertEquals(Error::ERR_SPACE, $err);
         self::assertNull($output);
         self::assertNull($remaining);
     }
