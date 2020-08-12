@@ -1,7 +1,5 @@
 <?php
 
-namespace Parcom\Benchmarks;
-
 use Parcom\Bytes;
 use Parcom\Sequence;
 use Parcom\Span;

@@ -1,7 +1,5 @@
 <?php
 
-namespace Parcom\Benchmarks;
-
 use Parcom\Error;
 use Parcom\Span;
 
