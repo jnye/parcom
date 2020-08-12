@@ -15,4 +15,15 @@ class Combinator
         };
     }
 
+    public static function map(callable $parser, callable $mapper): callable
+    {
+        return function (Span $input) use ($parser, $mapper) {
+            [$remaining, $output, $err] = $parser($input);
+            if ($err !== null) {
+                return [null, null, $err];
+            }
+            return [$remaining, $mapper($output), null];
+        };
+    }
+
 }
