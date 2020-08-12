@@ -17,7 +17,7 @@ class Combinator
 
     public static function map(callable $parser, callable $mapper): callable
     {
-        return function (Span $input) use ($parser, $mapper) {
+        return function (Span $input) use ($parser, $mapper): array {
             [$remaining, $output, $err] = $parser($input);
             if ($err !== null) {
                 return [null, null, $err];
@@ -28,7 +28,7 @@ class Combinator
 
     public static function peek(callable $parser): callable
     {
-        return function (Span $input) use ($parser) {
+        return function (Span $input) use ($parser): array {
             [, $output, $err] = $parser($input);
             if ($err !== null) {
                 return [null, null, $err];
@@ -39,7 +39,7 @@ class Combinator
 
     public static function opt(callable $parser): callable
     {
-        return function (Span $input) use ($parser) {
+        return function (Span $input) use ($parser): array {
             [$remaining, $output, $err] = $parser($input);
             if ($err !== null) {
                 return [$input, null, null];
@@ -50,7 +50,7 @@ class Combinator
 
     public static function recognize(callable $parser): callable
     {
-        return function (Span $input) use ($parser) {
+        return function (Span $input) use ($parser): array {
             [$remaining, $output, $err] = $parser($input);
             if ($err !== null) {
                 return [null, null, $err];
