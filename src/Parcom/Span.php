@@ -7,9 +7,9 @@ use ArrayAccess;
 class Span implements ArrayAccess
 {
 
-    private string $input;
-    private int $offset;
-    private int $length;
+    private $input;
+    private $offset;
+    private $length;
 
     /**
      * @param string $input
