@@ -74,10 +74,11 @@ class Span implements ArrayAccess
      */
     public function offsetGet($offset): string
     {
-        if ($offset < 0 || $this->offset + $offset >= $this->length) {
+        $idx = $this->offset + $offset;
+        if ($idx < 0 || $idx >= $this->offset + $this->length) {
             throw new Error();
         }
-        return $this->input[$this->offset + $offset];
+        return $this->input[$idx];
     }
 
     /**

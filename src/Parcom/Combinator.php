@@ -55,7 +55,7 @@ class Combinator
             if ($err !== null) {
                 return [null, null, $err];
             }
-            $output = new Span($input->input(), $input->offset(), $output->offset() + $output->length());
+            $output = new Span($input->input(), $input->offset(), $output->offset() + $output->length() - $input->offset());
             return [$remaining, $output, null];
         };
     }
