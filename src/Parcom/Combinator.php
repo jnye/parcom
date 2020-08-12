@@ -37,4 +37,15 @@ class Combinator
         };
     }
 
+    public static function opt(callable $parser): callable
+    {
+        return function (Span $input) use ($parser) {
+            [$remaining, $output, $err] = $parser($input);
+            if ($err !== null) {
+                return [$input, null, null];
+            }
+            return [$remaining, $output, null];
+        };
+    }
+
 }
