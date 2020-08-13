@@ -5,7 +5,7 @@ namespace Parcom;
 class Branch
 {
 
-    public static function alt(array $list): callable
+    public static function choice(array $list): callable
     {
         return function (Span $input) use ($list): array {
             $lastErr = null;

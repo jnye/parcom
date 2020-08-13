@@ -11,17 +11,17 @@ use Parcom\Span;
 class BranchBench
 {
 
-    public function benchAltInOrder()
+    public function benchChoiceInOrder()
     {
         $input = new Span('$abc');
-        $parser = Branch::alt([Bytes::tag('$'), Bytes::tag("abc")]);
+        $parser = Branch::choice([Bytes::tag('$'), Bytes::tag("abc")]);
         $parser($input);
     }
 
-    public function benchAltOutOfOrder()
+    public function benchChoiceOutOfOrder()
     {
         $input = new Span('$abc');
-        $parser = Branch::alt([Bytes::tag("abc"), Bytes::tag('$')]);
+        $parser = Branch::choice([Bytes::tag("abc"), Bytes::tag('$')]);
         $parser($input);
     }
 

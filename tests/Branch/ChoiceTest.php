@@ -9,36 +9,36 @@ use Parcom\Span;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Parcom\Branch::alt
+ * @covers \Parcom\Branch::choice
  */
-class AltTest extends TestCase
+class ChoiceTest extends TestCase
 {
 
-    public function testAltFirstWins()
+    public function testChoiceFirstWins()
     {
         $input = new Span("abc");
-        $alt = Branch::alt([Bytes::take(2), Bytes::take(1)]);
-        [$input, $output, $err] = $alt($input);
+        $choice = Branch::choice([Bytes::take(2), Bytes::take(1)]);
+        [$input, $output, $err] = $choice($input);
         self::assertEquals(null, $err);
         self::assertEquals("c", $input);
         self::assertEquals("ab", $output);
     }
 
-    public function testAltSecondWins()
+    public function testChoiceSecondWins()
     {
         $input = new Span("a");
-        $alt = Branch::alt([Bytes::take(2), Bytes::take(1)]);
-        [$input, $output, $err] = $alt($input);
+        $choice = Branch::choice([Bytes::take(2), Bytes::take(1)]);
+        [$input, $output, $err] = $choice($input);
         self::assertEquals(null, $err);
         self::assertEquals("", $input);
         self::assertEquals("a", $output);
     }
 
-    public function testAltFailure()
+    public function testChoiceFailure()
     {
         $input = new Span("a");
-        $alt = Branch::alt([Bytes::take(3), Bytes::take(2)]);
-        [$input, $output, $err] = $alt($input);
+        $choice = Branch::choice([Bytes::take(3), Bytes::take(2)]);
+        [$input, $output, $err] = $choice($input);
         self::assertEquals(Error::ERR_EOF, $err);
         self::assertEquals(null, $input);
         self::assertEquals(null, $output);

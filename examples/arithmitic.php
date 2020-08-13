@@ -12,7 +12,7 @@ use Parcom\Span;
 $oneOrMoreDigits = Character::digit1();
 
 $optionalSign = Combinator::opt(
-    Branch::alt([
+    Branch::choice([
         Bytes::tag("+"),
         Bytes::tag("-")
     ])
