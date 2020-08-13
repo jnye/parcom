@@ -8,60 +8,15 @@ use Parcom\Span;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Parcom\Character::is_space
- * @covers \Parcom\Character::is_alphabetic
- * @covers \Parcom\Character::is_alphanumeric
  * @covers \Parcom\Character::is_digit
- * @covers \Parcom\Character::space0
- * @covers \Parcom\Character::space1
  * @covers \Parcom\Character::digit0
  * @covers \Parcom\Character::digit1
- * @covers \Parcom\Character::alpha0
- * @covers \Parcom\Character::alpha1
- * @covers \Parcom\Character::alphanumeric0
- * @covers \Parcom\Character::alphanumeric1
  * @covers \Parcom\Character::zeroOrMore
  * @covers \Parcom\Character::oneOrMore
  * @covers \Parcom\Character::minCountMatch
  */
 class DigitTest extends TestCase
 {
-
-    public static function testIsSpace()
-    {
-        $valids = [" ", "\t"];
-        foreach ($valids as $valid) {
-            self::assertTrue(Character::is_space($valid));
-        }
-        $invalids = ["\n", "\r", 'a', 'z', '0', '9'];
-        foreach ($invalids as $invalid) {
-            self::assertFalse(Character::is_space($invalid));
-        }
-    }
-
-    public static function testIsAlphanumeric()
-    {
-        $valids = ['a', 'A', 'z', 'Z', 'm', 'M', '0', '9', '5'];
-        foreach ($valids as $valid) {
-            self::assertTrue(Character::is_alphanumeric($valid));
-        }
-        $invalids = ['-', '+', '.'];
-        foreach ($invalids as $invalid) {
-            self::assertFalse(Character::is_alphanumeric($invalid));
-        }
-    }
-
-    public static function testIsAlphabetic()
-    {
-        $letters = ['a', 'A', 'z', 'Z', 'm', 'M'];
-        foreach ($letters as $letter) {
-            self::assertTrue(Character::is_alphabetic($letter));
-        }
-        $notLetters = ['-', '+', '.', '4'];
-        foreach ($notLetters as $notLetter) {
-            self::assertFalse(Character::is_alphabetic($notLetter));
-        }
-    }
 
     public static function testIsDigit()
     {
@@ -116,141 +71,6 @@ class DigitTest extends TestCase
         $input = new Span("abc123");
         [$remaining, $output, $err] = Character::digit1()($input);
         self::assertEquals(Error::ERR_DIGIT, $err);
-        self::assertNull($output);
-        self::assertNull($remaining);
-    }
-
-    public function testAlpha0SuccessNoMatch()
-    {
-        $input = new Span("123");
-        [$remaining, $output, $err] = Character::alpha0()($input);
-        self::assertNull($err);
-        self::assertEquals("", $output);
-        self::assertEquals("123", $remaining);
-    }
-
-    public function testAlpha0SuccessMatch()
-    {
-        $input = new Span("aBc123");
-        [$remaining, $output, $err] = Character::alpha0()($input);
-        self::assertNull($err);
-        self::assertEquals("aBc", $output);
-        self::assertEquals("123", $remaining);
-    }
-
-    public function testAlpha1Success()
-    {
-        $input = new Span("aBc");
-        [$remaining, $output, $err] = Character::alpha1()($input);
-        self::assertNull($err);
-        self::assertEquals("aBc", $output);
-        self::assertEquals("", $remaining);
-    }
-
-    public function testAlpha1SuccessWithRemainder()
-    {
-        $input = new Span("aBc123");
-        [$remaining, $output, $err] = Character::alpha1()($input);
-        self::assertNull($err);
-        self::assertEquals("aBc", $output);
-        self::assertEquals("123", $remaining);
-    }
-
-    public function testAlpha1Failure()
-    {
-        $input = new Span("123aBc");
-        [$remaining, $output, $err] = Character::alpha1()($input);
-        self::assertEquals(Error::ERR_ALPHABETIC, $err);
-        self::assertNull($output);
-        self::assertNull($remaining);
-    }
-
-    public function testAlphanumeric0SuccessNoMatch()
-    {
-        $input = new Span("+[]=");
-        [$remaining, $output, $err] = Character::alphanumeric0()($input);
-        self::assertNull($err);
-        self::assertEquals("", $output);
-        self::assertEquals("+[]=", $remaining);
-    }
-
-    public function testAlphanumeric0SuccessMatch()
-    {
-        $input = new Span("aBc123[]");
-        [$remaining, $output, $err] = Character::alphanumeric0()($input);
-        self::assertNull($err);
-        self::assertEquals("aBc123", $output);
-        self::assertEquals("[]", $remaining);
-    }
-
-    public function testAlphanumeric1Success()
-    {
-        $input = new Span("aBc123");
-        [$remaining, $output, $err] = Character::alphanumeric1()($input);
-        self::assertNull($err);
-        self::assertEquals("aBc123", $output);
-        self::assertEquals("", $remaining);
-    }
-
-    public function testAlphanumeric1SuccessWithRemainder()
-    {
-        $input = new Span("aBc123[]");
-        [$remaining, $output, $err] = Character::alphanumeric1()($input);
-        self::assertNull($err);
-        self::assertEquals("aBc123", $output);
-        self::assertEquals("[]", $remaining);
-    }
-
-    public function testAlphanumeric1Failure()
-    {
-        $input = new Span("+[]=");
-        [$remaining, $output, $err] = Character::alphanumeric1()($input);
-        self::assertEquals(Error::ERR_ALPHANUMERIC, $err);
-        self::assertNull($output);
-        self::assertNull($remaining);
-    }
-
-    public function testSpace0SuccessNoMatch()
-    {
-        $input = new Span("");
-        [$remaining, $output, $err] = Character::space0()($input);
-        self::assertNull($err);
-        self::assertEquals("", $output);
-        self::assertEquals("", $remaining);
-    }
-
-    public function testSpace0SuccessMatch()
-    {
-        $input = new Span(" \t");
-        [$remaining, $output, $err] = Character::space0()($input);
-        self::assertNull($err);
-        self::assertEquals(" \t", $output);
-        self::assertEquals("", $remaining);
-    }
-
-    public function testSpace1Success()
-    {
-        $input = new Span(" \t");
-        [$remaining, $output, $err] = Character::space1()($input);
-        self::assertNull($err);
-        self::assertEquals(" \t", $output);
-        self::assertEquals("", $remaining);
-    }
-
-    public function testSpace1SuccessWithRemainder()
-    {
-        $input = new Span(" \ta+1");
-        [$remaining, $output, $err] = Character::space1()($input);
-        self::assertNull($err);
-        self::assertEquals(" \t", $output);
-        self::assertEquals("a+1", $remaining);
-    }
-
-    public function testSpace1Failure()
-    {
-        $input = new Span("a+1");
-        [$remaining, $output, $err] = Character::space1()($input);
-        self::assertEquals(Error::ERR_SPACE, $err);
         self::assertNull($output);
         self::assertNull($remaining);
     }

@@ -14,5 +14,6 @@ class Error extends Exception
     const ERR_ALPHABETIC = "Err::Alphabetic";
     const ERR_ALPHANUMERIC = "Err::Alphanumeric";
     const ERR_SPACE = "Err::Space";
+    const ERR_CRLF = "Err::Crlf";
 
 }
