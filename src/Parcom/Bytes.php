@@ -49,4 +49,25 @@ class Bytes
         };
     }
 
+    public static function isA(string $matches): callable
+    {
+        return function (Span $input) use ($matches): array {
+            $inputLength = $input->length();
+            if ($inputLength === 0) {
+                return [null, null, Error::ERR_EOF];
+            }
+            $count = 0;
+            for ($i = 0; $i < $inputLength; $i++) {
+                if (strpos($matches, $input[$i]) === false) {
+                    break;
+                }
+                $count++;
+            }
+            if ($count == 0) {
+                return [null, null, Error::ERR_IS_A];
+            }
+            return [$input->span($count), $input->span(0, $count), null];
+        };
+    }
+
 }
