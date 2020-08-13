@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Parcom\Character::space1
  * @covers \Parcom\Character::crlf
  * @covers \Parcom\Character::lf
+ * @covers \Parcom\Character::lineEnding
  * @covers \Parcom\Character::zeroOrMore
  * @covers \Parcom\Character::oneOrMore
  * @covers \Parcom\Character::minCountMatch
@@ -131,6 +132,43 @@ class SpaceTest extends TestCase
     {
         $input = new Span("");
         $parser = Character::lf();
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Error::ERR_EOF, $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testLineEndingSuccess()
+    {
+        $input = new Span("\r\n");
+        $parser = Character::lineEnding();
+        [$remaining, $output, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertEquals("\r\n", $output);
+        self::assertEquals("", $remaining);
+
+        $input = new Span("\n");
+        $parser = Character::lineEnding();
+        [$remaining, $output, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertEquals("\n", $output);
+        self::assertEquals("", $remaining);
+    }
+
+    public function testLineEndingMatchFailure()
+    {
+        $input = new Span("abc");
+        $parser = Character::lineEnding();
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Error::ERR_LINE_ENDING, $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testLineEndingEofFailure()
+    {
+        $input = new Span("");
+        $parser = Character::lineEnding();
         [$remaining, $output, $err] = $parser($input);
         self::assertEquals(Error::ERR_EOF, $err);
         self::assertNull($output);

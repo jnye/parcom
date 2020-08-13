@@ -16,5 +16,6 @@ class Error extends Exception
     const ERR_SPACE = "Err::Space";
     const ERR_CRLF = "Err::Crlf";
     const ERR_LF = "Err::Lf";
+    const ERR_LINE_ENDING = "Err::LineEnding";
 
 }

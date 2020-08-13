@@ -58,6 +58,26 @@ class Character
         };
     }
 
+    public static function lineEnding(): callable
+    {
+        return function (Span $input): array {
+            if ($input->length() < 1) {
+                return [null, null, "Err::Eof"];
+            }
+            $peek = $input->span(0, 1);
+            if ("\n" == $peek) {
+                return [$input->span(1), $peek, null];
+            }
+            if ($input->length() >= 2) {
+                $peek = $input->span(0, 2);
+                if ("\r\n" == $peek) {
+                    return [$input->span(2), $peek, null];
+                }
+            }
+            return [null, null, Error::ERR_LINE_ENDING];
+        };
+    }
+
     public static function is_digit(string $char): bool
     {
         return ord($char) >= ord('0') && ord($char) <= ord('9');
