@@ -20,8 +20,8 @@ class PermutationTest extends TestCase
         [$remainder, $output, $err] = Branch::permutation([Bytes::tag("a")])($span);
         self::assertEquals(null, $err);
         self::assertCount(1, $output);
-        self::assertEquals("a", (string)$output[0]);
-        self::assertEquals("b1", (string)$remainder);
+        self::assertEquals("a", $output[0]);
+        self::assertEquals("b1", $remainder);
     }
 
     public function testPermutationSimpleTwo()
@@ -33,9 +33,9 @@ class PermutationTest extends TestCase
         ])($span);
         self::assertEquals(null, $err);
         self::assertCount(2, $output);
-        self::assertEquals("a", (string)$output[0]);
-        self::assertEquals("b1", (string)$output[1]);
-        self::assertEquals("", (string)$remainder);
+        self::assertEquals("a", $output[0]);
+        self::assertEquals("b1", $output[1]);
+        self::assertEquals("", $remainder);
     }
 
     public function testPermutationSimpleTwoReverse()
@@ -47,9 +47,9 @@ class PermutationTest extends TestCase
         ])($span);
         self::assertEquals(null, $err);
         self::assertCount(2, $output);
-        self::assertEquals("a", (string)$output[0]);
-        self::assertEquals("b1", (string)$output[1]);
-        self::assertEquals("", (string)$remainder);
+        self::assertEquals("a", $output[0]);
+        self::assertEquals("b1", $output[1]);
+        self::assertEquals("", $remainder);
     }
 
     public function testPermutationSimpleThreeComplex()
@@ -62,10 +62,10 @@ class PermutationTest extends TestCase
         ])($span);
         self::assertEquals(null, $err);
         self::assertCount(3, $output);
-        self::assertEquals("abc", (string)$output[0]);
-        self::assertEquals("123", (string)$output[1]);
-        self::assertEquals("ABC", (string)$output[2]);
-        self::assertEquals("", (string)$remainder);
+        self::assertEquals("abc", $output[0]);
+        self::assertEquals("123", $output[1]);
+        self::assertEquals("ABC", $output[2]);
+        self::assertEquals("", $remainder);
     }
 
     public function testPermutationSimpleThreeComplexFailure()

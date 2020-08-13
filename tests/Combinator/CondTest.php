@@ -19,8 +19,8 @@ class CondTest extends TestCase
         $parser = Bytes::take(3);
         [$remaining, $output, $err] = Combinator::cond(true, $parser)($input);
         self::assertNull($err);
-        self::assertEquals("abc", (string)$output);
-        self::assertEquals("", (string)$remaining);
+        self::assertEquals("abc", $output);
+        self::assertEquals("", $remaining);
     }
 
     public function testCondFalse()
@@ -30,7 +30,7 @@ class CondTest extends TestCase
         [$remaining, $output, $err] = Combinator::cond(false, $parser)($input);
         self::assertNull($err);
         self::assertNull($output);
-        self::assertEquals("abc", (string)$remaining);
+        self::assertEquals("abc", $remaining);
     }
 
 }

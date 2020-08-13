@@ -23,13 +23,13 @@ $integer = Combinator::recognize(
 );
 
 [$remaining, $output, $err] = $integer(new Span("314"));
-print "Found an integer: " . (string)$output . "\n";
+print "Found an integer: " . $output . "\n";
 
 [$remaining, $output, $err] = $integer(new Span("-314"));
-print "Found an integer: " . (string)$output . "\n";
+print "Found an integer: " . $output . "\n";
 
 [$remaining, $output, $err] = $integer(new Span("+314"));
-print "Found an integer: " . (string)$output . "\n";
+print "Found an integer: " . $output . "\n";
 
 $decimalPoint = Bytes::tag(".");
 
@@ -50,10 +50,10 @@ $real = Combinator::recognize(
 );
 
 [$remaining, $output, $err] = $real(new Span("3.14"));
-print "Found an real: " . (string)$output . "\n";
+print "Found an real: " . $output . "\n";
 
 [$remaining, $output, $err] = $real(new Span("-3.14"));
-print "Found an real: " . (string)$output . "\n";
+print "Found an real: " . $output . "\n";
 
 [$remaining, $output, $err] = $real(new Span("+3.14"));
-print "Found an real: " . (string)$output . "\n";
+print "Found an real: " . $output . "\n";

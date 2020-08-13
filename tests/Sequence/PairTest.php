@@ -23,9 +23,9 @@ class PairTest extends TestCase
         );
         [$remaining, $outputs, $err] = $parser($input);
         self::assertNull($err);
-        self::assertEquals("air", (string)$outputs[0]);
-        self::assertEquals("craft", (string)$outputs[1]);
-        self::assertEquals("", (string)$remaining);
+        self::assertEquals("air", $outputs[0]);
+        self::assertEquals("craft", $outputs[1]);
+        self::assertEquals("", $remaining);
     }
 
     public function testSequenceFirstFailure()

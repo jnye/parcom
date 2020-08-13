@@ -27,7 +27,7 @@ class Bytes
                 return [null, null, "Err::Eof"];
             }
             $peek = $input->span(0, $tagLen);
-            if ($tag == (string)$peek) {
+            if ($tag == $peek) {
                 return [$input->span($tagLen), $peek, null];
             }
             return [null, null, Error::ERR_TAG];

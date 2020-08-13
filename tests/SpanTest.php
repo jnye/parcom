@@ -13,7 +13,7 @@ class SpanTest extends TestCase
     public function testSliceToString()
     {
         $slice = new Span("aircraft");
-        self::assertEquals("aircraft", (string)$slice);
+        self::assertEquals("aircraft", $slice);
         self::assertSame(0, $slice->offset());
         self::assertSame(8, $slice->length());
         self::assertSame("aircraft", $slice->input());
@@ -44,9 +44,9 @@ class SpanTest extends TestCase
     public function testSliceArrayOffsetGetValidIndexes()
     {
         $slice = new Span("abc");
-        self::assertEquals("a", (string)$slice[0]);
-        self::assertEquals("b", (string)$slice[1]);
-        self::assertEquals("c", (string)$slice[2]);
+        self::assertEquals("a", $slice[0]);
+        self::assertEquals("b", $slice[1]);
+        self::assertEquals("c", $slice[2]);
     }
 
     public function testSliceArrayOffsetSetNotSupported()
@@ -76,7 +76,7 @@ class SpanTest extends TestCase
     public function testSliceOfSlice()
     {
         $slice = new Span("aircraft");
-        self::assertEquals("irc", (string)$slice->span(1, 3));
+        self::assertEquals("irc", $slice->span(1, 3));
     }
 
     public function testSpanBadLength()

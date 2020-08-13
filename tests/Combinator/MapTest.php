@@ -23,7 +23,7 @@ class MapTest extends TestCase
         };
         [$remaining, $output, $err] = Combinator::map($parser, $mapper)($input);
         self::assertNull($err);
-        self::assertEquals("c", (string)$remaining);
+        self::assertEquals("c", $remaining);
         self::assertSame(2, $output);
     }
 

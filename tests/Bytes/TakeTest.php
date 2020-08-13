@@ -19,8 +19,8 @@ class TakeTest extends TestCase
         $result = Bytes::take(0)($span);
         [$remaining, $output, $err] = $result;
         self::assertNull($err);
-        self::assertEquals("abc", (string)$remaining);
-        self::assertEquals("", (string)$output);
+        self::assertEquals("abc", $remaining);
+        self::assertEquals("", $output);
     }
 
     public function testTakeOne()
@@ -28,8 +28,8 @@ class TakeTest extends TestCase
         $span = new Span("abc");
         $result = Bytes::take(1)($span);
         [$input, $output] = $result;
-        self::assertEquals("bc", (string)$input);
-        self::assertEquals("a", (string)$output);
+        self::assertEquals("bc", $input);
+        self::assertEquals("a", $output);
     }
 
     public function testTakeTwo()
@@ -37,8 +37,8 @@ class TakeTest extends TestCase
         $span = new Span("abc");
         $result = Bytes::take(2)($span);
         [$input, $output] = $result;
-        self::assertEquals("c", (string)$input);
-        self::assertEquals("ab", (string)$output);
+        self::assertEquals("c", $input);
+        self::assertEquals("ab", $output);
     }
 
     public function testTakeThree()
@@ -46,8 +46,8 @@ class TakeTest extends TestCase
         $span = new Span("abc");
         $result = Bytes::take(3)($span);
         [$input, $output] = $result;
-        self::assertEquals("", (string)$input);
-        self::assertEquals("abc", (string)$output);
+        self::assertEquals("", $input);
+        self::assertEquals("abc", $output);
     }
 
     public function testTakeErrEof()
@@ -56,8 +56,8 @@ class TakeTest extends TestCase
         $result = Bytes::take(4)($span);
         [$input, $output, $err] = $result;
         self::assertEquals(Error::ERR_EOF, $err);
-        self::assertEquals(null, (string)$input);
-        self::assertEquals(null, (string)$output);
+        self::assertEquals(null, $input);
+        self::assertEquals(null, $output);
     }
 
 }

@@ -23,8 +23,8 @@ class PrecededTest extends TestCase
         );
         [$remaining, $output, $err] = $parser($input);
         self::assertNull($err);
-        self::assertEquals("craft", (string)$output);
-        self::assertEquals("", (string)$remaining);
+        self::assertEquals("craft", $output);
+        self::assertEquals("", $remaining);
     }
 
     public function testPrecededFirstFailure()

@@ -18,8 +18,8 @@ class TagTest extends TestCase
         $span = new Span("a");
         [$input, $output, $err] = Bytes::tag("a")($span);
         self::assertNull($err);
-        self::assertEquals("a", (string)$output);
-        self::assertEquals("", (string)$input);
+        self::assertEquals("a", $output);
+        self::assertEquals("", $input);
     }
 
     public function testTagSimpleMismatch()

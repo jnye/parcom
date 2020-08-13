@@ -20,8 +20,8 @@ class AltTest extends TestCase
         $alt = Branch::alt([Bytes::take(2), Bytes::take(1)]);
         [$input, $output, $err] = $alt($input);
         self::assertEquals(null, $err);
-        self::assertEquals("c", (string)$input);
-        self::assertEquals("ab", (string)$output);
+        self::assertEquals("c", $input);
+        self::assertEquals("ab", $output);
     }
 
     public function testAltSecondWins()
@@ -30,8 +30,8 @@ class AltTest extends TestCase
         $alt = Branch::alt([Bytes::take(2), Bytes::take(1)]);
         [$input, $output, $err] = $alt($input);
         self::assertEquals(null, $err);
-        self::assertEquals("", (string)$input);
-        self::assertEquals("a", (string)$output);
+        self::assertEquals("", $input);
+        self::assertEquals("a", $output);
     }
 
     public function testAltFailure()

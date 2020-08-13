@@ -24,7 +24,7 @@ class RecognizeTest extends TestCase
         );
         [$remaining, $output, $err] = Combinator::recognize($parser)($input);
         self::assertNull($err);
-        self::assertEquals("pocketbook", (string)$output);
+        self::assertEquals("pocketbook", $output);
         self::assertEquals("s", $remaining);
     }
 
