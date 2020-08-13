@@ -34,4 +34,19 @@ class Bytes
         };
     }
 
+    public static function tagNoCase(string $tag): callable
+    {
+        return function (Span $input) use ($tag): array {
+            $tagLen = strlen($tag);
+            if ($input->length() < $tagLen) {
+                return [null, null, "Err::Eof"];
+            }
+            $peek = $input->span(0, $tagLen);
+            if (strcasecmp($tag, $peek) === 0) {
+                return [$input->span($tagLen), $peek, null];
+            }
+            return [null, null, Error::ERR_TAG];
+        };
+    }
+
 }

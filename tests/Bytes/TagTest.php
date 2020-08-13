@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Parcom\Bytes::tag
+ * @covers \Parcom\Bytes::tagNoCase
  */
 class TagTest extends TestCase
 {
@@ -38,6 +39,33 @@ class TagTest extends TestCase
         self::assertEquals(Error::ERR_EOF, $err);
         self::assertNull($input);
         self::assertNull($output);
+    }
+
+    public function testTagNoCaseSimpleMatch()
+    {
+        $span = new Span("aBc");
+        [$remaining, $output, $err] = Bytes::tagNoCase("abc")($span);
+        self::assertNull($err);
+        self::assertEquals("aBc", $output);
+        self::assertEquals("", $remaining);
+    }
+
+    public function testTagNoCaseMatchFailure()
+    {
+        $span = new Span("DeF");
+        [$remaining, $output, $err] = Bytes::tagNoCase("abc")($span);
+        self::assertEquals(Error::ERR_TAG, $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testTagNoCaseEofFailure()
+    {
+        $span = new Span("");
+        [$remaining, $output, $err] = Bytes::tagNoCase("abc")($span);
+        self::assertEquals(Error::ERR_EOF, $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
     }
 
 }
