@@ -12,6 +12,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Parcom\Character::space0
  * @covers \Parcom\Character::space1
  * @covers \Parcom\Character::crlf
+ * @covers \Parcom\Character::lf
  * @covers \Parcom\Character::zeroOrMore
  * @covers \Parcom\Character::oneOrMore
  * @covers \Parcom\Character::minCountMatch
@@ -86,12 +87,52 @@ class SpaceTest extends TestCase
         self::assertEquals("", $remaining);
     }
 
-    public function testCrlfFailure()
+    public function testCrlfMatchFailure()
     {
         $input = new Span("abc");
         $parser = Character::crlf();
         [$remaining, $output, $err] = $parser($input);
         self::assertEquals(Error::ERR_CRLF, $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testCrlfEofFailure()
+    {
+        $input = new Span("");
+        $parser = Character::crlf();
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Error::ERR_EOF, $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testLfSuccess()
+    {
+        $input = new Span("\n");
+        $parser = Character::lf();
+        [$remaining, $output, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertEquals("\n", $output);
+        self::assertEquals("", $remaining);
+    }
+
+    public function testLfMatchFailure()
+    {
+        $input = new Span("abc");
+        $parser = Character::lf();
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Error::ERR_LF, $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testLfEofFailure()
+    {
+        $input = new Span("");
+        $parser = Character::lf();
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Error::ERR_EOF, $err);
         self::assertNull($output);
         self::assertNull($remaining);
     }
