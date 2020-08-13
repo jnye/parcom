@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Parcom\Character::is_space
  * @covers \Parcom\Character::space0
  * @covers \Parcom\Character::space1
+ * @covers \Parcom\Character::crlf
  * @covers \Parcom\Character::zeroOrMore
  * @covers \Parcom\Character::oneOrMore
  * @covers \Parcom\Character::minCountMatch
@@ -71,6 +72,26 @@ class SpaceTest extends TestCase
         $input = new Span("a+1");
         [$remaining, $output, $err] = Character::space1()($input);
         self::assertEquals(Error::ERR_SPACE, $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testCrlfSuccess()
+    {
+        $input = new Span("\r\n");
+        $parser = Character::crlf();
+        [$remaining, $output, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertEquals("\r\n", $output);
+        self::assertEquals("", $remaining);
+    }
+
+    public function testCrlfFailure()
+    {
+        $input = new Span("abc");
+        $parser = Character::crlf();
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Error::ERR_CRLF, $err);
         self::assertNull($output);
         self::assertNull($remaining);
     }
