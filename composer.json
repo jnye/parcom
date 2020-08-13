@@ -19,7 +19,12 @@
   "autoload": {
     "psr-4": {
       "Parcom\\": "src/Parcom/"
-    }
+    },
+    "files": [
+      "src/Parcom/Branch/branch.php",
+      "src/Parcom/Bytes/complete.php",
+      "src/Parcom/Bytes/streaming.php"
+    ]
   },
   "scripts": {
     "test": [
