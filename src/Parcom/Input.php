@@ -2,7 +2,7 @@
 
 namespace Parcom;
 
-class Input
+class Input implements \ArrayAccess
 {
     private string $data;
     private int $length;
@@ -101,4 +101,23 @@ class Input
         return $result;
     }
 
+    public function offsetExists($offset)
+    {
+        // TODO: Implement offsetExists() method.
+    }
+
+    public function offsetGet($offset)
+    {
+        // TODO: Implement offsetGet() method.
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        // TODO: Implement offsetSet() method.
+    }
+
+    public function offsetUnset($offset)
+    {
+        // TODO: Implement offsetUnset() method.
+    }
 }

@@ -12,17 +12,23 @@ class IResult implements ArrayAccess
     private ?Input $remaining;
     private ?Input $output;
     private ?Err $err;
+    private ?array $outputs;
 
-    private function __construct(?Input $remaining, ?Input $output, ?Err $err)
+    private function __construct(?Input $remaining, ?Input $output, ?Err $err, Input ...$outputs)
     {
         $this->remaining = $remaining;
         $this->output = $output;
         $this->err = $err;
+        $this->outputs = $outputs;
     }
 
-    public static function Ok(Input $remaining, Input $output): self
+    public static function Ok(Input $remaining, Input ...$outputs): self
     {
-        return new IResult($remaining, $output, null);
+        if (count($outputs) === 1) {
+            return new IResult($remaining, $outputs[0], null);
+        } else {
+            return new IResult($remaining, null, null, ...$outputs);
+        }
     }
 
     public static function Err(Err $err): self
@@ -63,6 +69,9 @@ class IResult implements ArrayAccess
         if ($offset === 0) {
             return $this->remaining;
         } else if ($offset === 1) {
+            if (!is_null($this->outputs) && count($this->outputs) > 0) {
+                return $this->outputs;
+            }
             return $this->output;
         } else if ($offset === 2) {
             return $this->err;

@@ -5,6 +5,7 @@ use Parcom\ErrorKind;
 use Parcom\Input;
 use PHPUnit\Framework\TestCase;
 use function Parcom\Branch\alt;
+use function Parcom\Branch\permutation;
 use function Parcom\Bytes\Complete\tag;
 
 /**
@@ -51,6 +52,42 @@ class BranchTest extends TestCase
         self::assertEquals(Err::Error($input, ErrorKind::Tag()), $err);
         self::assertNull($output);
         self::assertNull($remaining);
+    }
+
+    public function testPermutationSuccessInOrder()
+    {
+        $input = new Input("abc123-+=");
+        $parser = permutation(
+            tag("abc"),
+            tag("123"),
+            tag("-+=")
+        );
+        [$remaining, $outputs, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertIsArray($outputs);
+        self::assertCount(3, $outputs);
+        self::assertEquals("abc", $outputs[0]);
+        self::assertEquals("123", $outputs[1]);
+        self::assertEquals("-+=", $outputs[2]);
+        self::assertEquals("", $remaining);
+    }
+
+    public function testPermutationSuccessOutOfOrder()
+    {
+        $input = new Input("-+=abc123");
+        $parser = permutation(
+            tag("123"),
+            tag("abc"),
+            tag("-+=")
+        );
+        [$remaining, $outputs, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertIsArray($outputs);
+        self::assertCount(3, $outputs);
+        self::assertEquals("123", $outputs[0]);
+        self::assertEquals("abc", $outputs[1]);
+        self::assertEquals("-+=", $outputs[2]);
+        self::assertEquals("", $remaining);
     }
 
 }
