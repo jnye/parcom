@@ -90,4 +90,32 @@ class BranchTest extends TestCase
         self::assertEquals("", $remaining);
     }
 
+    public function testPermutationErrorNoMatches()
+    {
+        $input = new Input("foobar");
+        $parser = permutation(
+            tag("123"),
+            tag("abc"),
+            tag("-+=")
+        );
+        [$remaining, $outputs, $err] = $parser($input);
+        self::assertNotNull($err);
+        self::assertNull($outputs);
+        self::assertNull($remaining);
+    }
+
+    public function testPermutationErrorSomeMatches()
+    {
+        $input = new Input("123foo");
+        $parser = permutation(
+            tag("123"),
+            tag("abc"),
+            tag("-+=")
+        );
+        [$remaining, $outputs, $err] = $parser($input);
+        self::assertNotNull($err);
+        self::assertNull($outputs);
+        self::assertNull($remaining);
+    }
+
 }
