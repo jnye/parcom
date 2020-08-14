@@ -23,7 +23,8 @@
     "files": [
       "src/Parcom/Branch/branch.php",
       "src/Parcom/Bytes/complete.php",
-      "src/Parcom/Bytes/streaming.php"
+      "src/Parcom/Bytes/streaming.php",
+      "src/Parcom/Sequence/sequence.php"
     ]
   },
   "scripts": {
