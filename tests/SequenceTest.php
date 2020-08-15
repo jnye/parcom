@@ -7,9 +7,12 @@ use PHPUnit\Framework\TestCase;
 use function Parcom\Bytes\Complete\tag;
 use function Parcom\Sequence\delimited;
 use function Parcom\Sequence\pair;
+use function Parcom\Sequence\preceded;
 
 /**
  * @covers \Parcom\Sequence\delimited
+ * @covers \Parcom\Sequence\pair
+ * @covers \Parcom\Sequence\preceded
  */
 class SequenceTest extends TestCase
 {
@@ -107,6 +110,46 @@ class SequenceTest extends TestCase
         [$remaining, $outputs, $err] = $parser($input);
         self::assertEquals(Err::Error(new Input("X"), ErrorKind::Tag()), $err);
         self::assertNull($outputs);
+        self::assertNull($remaining);
+    }
+
+    public function testPrecededSuccess()
+    {
+        $input = new Input("ab");
+        $parser = preceded(tag("a"), tag("b"));
+        [$remaining, $output, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertEquals("b", $output);
+        self::assertEquals("", $remaining);
+    }
+
+    public function testPrecededSuccessRemainder()
+    {
+        $input = new Input("abc");
+        $parser = preceded(tag("a"), tag("b"));
+        [$remaining, $output, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertEquals("b", $output);
+        self::assertEquals("c", $remaining);
+    }
+
+    public function testPrecededErrorFirst()
+    {
+        $input = new Input("Xb");
+        $parser = preceded(tag("a"), tag("b"));
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Err::Error($input, ErrorKind::Tag()), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testPrecededErrorSecond()
+    {
+        $input = new Input("aX");
+        $parser = preceded(tag("a"), tag("b"));
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Err::Error(new Input("X"), ErrorKind::Tag()), $err);
+        self::assertNull($output);
         self::assertNull($remaining);
     }
 

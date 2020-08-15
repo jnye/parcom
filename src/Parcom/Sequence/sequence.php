@@ -38,3 +38,14 @@ function pair(callable $first, callable $second): callable
         return IResult::Ok($secondResult[0], $firstResult[1], $secondResult[1]);
     };
 }
+
+function preceded(callable $first, callable $second): callable
+{
+    return function (Input $input) use ($first, $second): IResult {
+        $firstResult = $first($input);
+        if ($firstResult->is_err()) {
+            return $firstResult;
+        }
+        return $second($firstResult[0]);
+    };
+}
