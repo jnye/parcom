@@ -49,3 +49,22 @@ function preceded(callable $first, callable $second): callable
         return $second($firstResult[0]);
     };
 }
+
+function separated_pair(callable $first, callable $sep, callable $second): callable
+{
+    return function (Input $input) use ($first, $sep, $second): IResult {
+        $firstResult = $first($input);
+        if ($firstResult->is_err()) {
+            return $firstResult;
+        }
+        $sepResult = $sep($firstResult[0]);
+        if ($sepResult->is_err()) {
+            return $sepResult;
+        }
+        $secondResult = $second($sepResult[0]);
+        if ($secondResult->is_err()) {
+            return $secondResult;
+        }
+        return IResult::Ok($secondResult[0], $firstResult[1], $secondResult[1]);
+    };
+}

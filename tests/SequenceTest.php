@@ -8,6 +8,7 @@ use function Parcom\Bytes\Complete\tag;
 use function Parcom\Sequence\delimited;
 use function Parcom\Sequence\pair;
 use function Parcom\Sequence\preceded;
+use function Parcom\Sequence\separated_pair;
 
 /**
  * @covers \Parcom\Sequence\delimited
@@ -150,6 +151,62 @@ class SequenceTest extends TestCase
         [$remaining, $output, $err] = $parser($input);
         self::assertEquals(Err::Error(new Input("X"), ErrorKind::Tag()), $err);
         self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testSeparatedPairSuccess()
+    {
+        $input = new Input("a,b");
+        $parser = separated_pair(tag("a"), tag(","), tag("b"));
+        [$remaining, $outputs, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertIsArray($outputs);
+        self::assertCount(2, $outputs);
+        self::assertEquals("a", $outputs[0]);
+        self::assertEquals("b", $outputs[1]);
+        self::assertEquals("", $remaining);
+    }
+
+    public function testSeparatedPairSuccessRemainder()
+    {
+        $input = new Input("a,bc");
+        $parser = separated_pair(tag("a"), tag(","), tag("b"));
+        [$remaining, $outputs, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertIsArray($outputs);
+        self::assertCount(2, $outputs);
+        self::assertEquals("a", $outputs[0]);
+        self::assertEquals("b", $outputs[1]);
+        self::assertEquals("c", $remaining);
+    }
+
+    public function testSeparatedPairErrorFirst()
+    {
+        $input = new Input("X,b");
+        $parser = separated_pair(tag("a"), tag(","), tag("b"));
+        [$remaining, $outputs, $err] = $parser($input);
+        self::assertEquals(Err::Error($input, ErrorKind::Tag()), $err);
+        self::assertNull($outputs);
+        self::assertNull($remaining);
+    }
+
+    public function testSeparatedPairErrorSep()
+    {
+        $input = new Input("aXb");
+        $parser = separated_pair(tag("a"), tag(","), tag("b"));
+        [$remaining, $outputs, $err] = $parser($input);
+        self::assertEquals(Err::Error(new Input("Xb"), ErrorKind::Tag()), $err);
+        self::assertNull($outputs);
+        self::assertNull($remaining);
+    }
+
+    public function testSeparatedPairErrorSecond()
+    {
+        $input = new Input("a,X");
+        $parser = separated_pair(tag("a"), tag(","), tag("b"));
+        [$remaining, $outputs, $err] = $parser($input);
+        self::assertEquals(Err::Error(new Input("X"), ErrorKind::Tag()), $err);
+        self::assertNull($outputs);
         self::assertNull($remaining);
     }
 
