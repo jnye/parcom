@@ -2,6 +2,8 @@
 
 namespace Parcom;
 
+use OutOfRangeException;
+
 class Input implements \ArrayAccess
 {
     private string $data;
@@ -108,7 +110,10 @@ class Input implements \ArrayAccess
 
     public function offsetGet($offset)
     {
-        // TODO: Implement offsetGet() method.
+        if ($offset >= $this->length) {
+            throw new OutOfRangeException();
+        }
+        return $this->data[$this->offset + $offset];
     }
 
     public function offsetSet($offset, $value)
