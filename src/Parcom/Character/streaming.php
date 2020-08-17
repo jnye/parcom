@@ -12,7 +12,6 @@ use function Parcom\Character\is_alphabetic;
 function alpha0(): callable
 {
     return function (Input $input): IResult {
-        $matched = false;
         $eof = false;
         $count = 0;
         do {
@@ -41,7 +40,6 @@ function alpha0(): callable
 function alpha1(): callable
 {
     return function (Input $input): IResult {
-        $matched = false;
         $eof = false;
         $count = 0;
         do {
