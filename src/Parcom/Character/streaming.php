@@ -29,3 +29,10 @@ function digit0(): callable
         return $input->split_at_position(fn($c) => !is_digit($c));
     };
 }
+
+function digit1(): callable
+{
+    return function (Input $input): IResult {
+        return $input->split_at_position1(fn($c) => !is_digit($c), ErrorKind::Digit());
+    };
+}
