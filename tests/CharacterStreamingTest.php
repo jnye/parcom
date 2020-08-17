@@ -15,11 +15,11 @@ class CharacterStreamingTest extends TestCase
 
     public function testAlpha0Success()
     {
-        $input = new Input("abc");
+        $input = new Input("abc1");
         [$remaining, $output, $err] = alpha0()($input);
         self::assertNull($err);
         self::assertEquals("abc", $output);
-        self::assertEquals("", $remaining);
+        self::assertEquals("1", $remaining);
     }
 
     public function testAlpha0SuccessRemaining()
@@ -44,18 +44,18 @@ class CharacterStreamingTest extends TestCase
     {
         $input = new Input("");
         [$remaining, $output, $err] = alpha0()($input);
-        self::assertEquals(\Parcom\Err::Incomplete(\Parcom\Needed::Unknown()), $err);
+        self::assertEquals(\Parcom\Err::Incomplete(\Parcom\Needed::Size(1)), $err);
         self::assertNull($output);
         self::assertNull($remaining);
     }
 
     public function testAlpha1Success()
     {
-        $input = new Input("abc");
+        $input = new Input("abc1");
         [$remaining, $output, $err] = alpha1()($input);
         self::assertNull($err);
         self::assertEquals("abc", $output);
-        self::assertEquals("", $remaining);
+        self::assertEquals("1", $remaining);
     }
 
     public function testAlpha1SuccessRemaining()
@@ -80,7 +80,7 @@ class CharacterStreamingTest extends TestCase
     {
         $input = new Input("");
         [$remaining, $output, $err] = alpha1()($input);
-        self::assertEquals(\Parcom\Err::Incomplete(\Parcom\Needed::Unknown()), $err);
+        self::assertEquals(\Parcom\Err::Incomplete(\Parcom\Needed::Size(1)), $err);
         self::assertNull($output);
         self::assertNull($remaining);
     }
