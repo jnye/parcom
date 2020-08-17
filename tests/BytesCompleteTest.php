@@ -10,6 +10,8 @@ use function Parcom\Bytes\Complete\take_till1;
 
 /**
  * @covers \Parcom\Bytes\Complete\tag
+ * @covers \Parcom\Bytes\Complete\take_till
+ * @covers \Parcom\Bytes\Complete\take_till1
  */
 class BytesCompleteTest extends TestCase
 {
