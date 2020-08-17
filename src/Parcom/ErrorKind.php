@@ -10,6 +10,7 @@ class ErrorKind
     private const PERMUTATION = 'Permutation';
     private const ALPHA = 'Alpha';
     private const DIGIT = 'Digit';
+    private const TAKE_WHILE1 = 'TakeWhile1';
 
     private string $variant;
 
@@ -46,6 +47,11 @@ class ErrorKind
     public static function Digit()
     {
         return new self(self::DIGIT);
+    }
+
+    public static function TakeWhile1()
+    {
+        return new self(self::TAKE_WHILE1);
     }
 
     public function __toString(): string
