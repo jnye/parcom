@@ -2,11 +2,9 @@
 
 namespace Parcom\Character\Streaming;
 
-use Parcom\Err;
 use Parcom\ErrorKind;
 use Parcom\Input;
 use Parcom\IResult;
-use Parcom\Needed;
 use function Parcom\Character\is_alphabetic;
 
 function alpha0(): callable
