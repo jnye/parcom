@@ -68,3 +68,18 @@ function separated_pair(callable $first, callable $sep, callable $second): calla
         return IResult::Ok($secondResult[0], $firstResult[1], $secondResult[1]);
     };
 }
+
+function terminated(callable $first, callable $second): callable
+{
+    return function (Input $input) use ($first, $second): IResult {
+        $firstResult = $first($input);
+        if ($firstResult->is_err()) {
+            return $firstResult;
+        }
+        $secondResult = $second($firstResult[0]);
+        if ($secondResult->is_err()) {
+            return $secondResult;
+        }
+        return IResult::Ok($secondResult[0], $firstResult[1]);
+    };
+}

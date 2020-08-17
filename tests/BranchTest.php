@@ -10,6 +10,7 @@ use function Parcom\Bytes\Complete\tag;
 
 /**
  * @covers \Parcom\Branch\alt
+ * @covers \Parcom\Branch\permutation
  */
 class BranchTest extends TestCase
 {
