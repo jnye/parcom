@@ -3,10 +3,12 @@
 use Parcom\Input;
 use PHPUnit\Framework\TestCase;
 use function Parcom\Character\Streaming\alpha0;
+use function Parcom\Character\Streaming\alpha1;
 
 /**
  * @covers \Parcom\Character\is_alphabetic
  * @covers \Parcom\Character\Streaming\alpha0
+ * @covers \Parcom\Character\Streaming\alpha1
  */
 class CharacterStreamingTest extends TestCase
 {
@@ -42,6 +44,42 @@ class CharacterStreamingTest extends TestCase
     {
         $input = new Input("");
         [$remaining, $output, $err] = alpha0()($input);
+        self::assertEquals(\Parcom\Err::Incomplete(\Parcom\Needed::Unknown()), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testAlpha1Success()
+    {
+        $input = new Input("abc");
+        [$remaining, $output, $err] = alpha1()($input);
+        self::assertNull($err);
+        self::assertEquals("abc", $output);
+        self::assertEquals("", $remaining);
+    }
+
+    public function testAlpha1SuccessRemaining()
+    {
+        $input = new Input("abc1def");
+        [$remaining, $output, $err] = alpha1()($input);
+        self::assertNull($err);
+        self::assertEquals("abc", $output);
+        self::assertEquals("1def", $remaining);
+    }
+
+    public function testAlpha1ErrorZero()
+    {
+        $input = new Input("1def");
+        [$remaining, $output, $err] = alpha1()($input);
+        self::assertEquals(\Parcom\Err::Error($input, \Parcom\ErrorKind::Alpha()), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testAlpha1Incomplete()
+    {
+        $input = new Input("");
+        [$remaining, $output, $err] = alpha1()($input);
         self::assertEquals(\Parcom\Err::Incomplete(\Parcom\Needed::Unknown()), $err);
         self::assertNull($output);
         self::assertNull($remaining);

@@ -8,6 +8,7 @@ class ErrorKind
     private const TAG = 'Tag';
     private const TAKE_TILL_1 = 'TakeTill1';
     private const PERMUTATION = 'Permutation';
+    private const ALPHA = 'Alpha';
 
     private string $variant;
 
@@ -34,6 +35,11 @@ class ErrorKind
     public static function Permutation()
     {
         return new self(self::PERMUTATION);
+    }
+
+    public static function Alpha()
+    {
+        return new self(self::ALPHA);
     }
 
     public function __toString(): string
