@@ -83,3 +83,20 @@ function terminated(callable $first, callable $second): callable
         return IResult::Ok($secondResult[0], $firstResult[1]);
     };
 }
+
+function tuple(callable ...$parsers): callable
+{
+    return function (Input $input) use ($parsers): IResult {
+        $outputs = [];
+        $remaining = $input;
+        foreach ($parsers as $idx => $parser) {
+            $result = $parser($remaining);
+            if ($result->is_err()) {
+                return $result;
+            }
+            $outputs[$idx] = $result[1];
+            $remaining = $result[0];
+        }
+        return IResult::Ok($remaining, ...$outputs);
+    };
+}

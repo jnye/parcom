@@ -10,6 +10,7 @@ use function Parcom\Sequence\pair;
 use function Parcom\Sequence\preceded;
 use function Parcom\Sequence\separated_pair;
 use function Parcom\Sequence\terminated;
+use function Parcom\Sequence\tuple;
 
 /**
  * @covers \Parcom\Sequence\delimited
@@ -17,6 +18,7 @@ use function Parcom\Sequence\terminated;
  * @covers \Parcom\Sequence\preceded
  * @covers \Parcom\Sequence\separated_pair
  * @covers \Parcom\Sequence\terminated
+ * @covers \Parcom\Sequence\tuple
  */
 class SequenceTest extends TestCase
 {
@@ -250,6 +252,76 @@ class SequenceTest extends TestCase
         [$remaining, $output, $err] = $parser($input);
         self::assertEquals(Err::Error(new Input("X"), ErrorKind::Tag()), $err);
         self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testTupleSuccess()
+    {
+        $input = new Input("when");
+        $parser = tuple(tag("w"), tag("h"), tag("e"), tag("n"));
+        [$remaining, $outputs, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertIsArray($outputs);
+        self::assertCount(4, $outputs);
+        self::assertEquals("w", $outputs[0]);
+        self::assertEquals("h", $outputs[1]);
+        self::assertEquals("e", $outputs[2]);
+        self::assertEquals("n", $outputs[3]);
+        self::assertEquals("", $remaining);
+    }
+
+    public function testTupleSuccessRemaining()
+    {
+        $input = new Input("whence");
+        $parser = tuple(tag("w"), tag("h"), tag("e"), tag("n"));
+        [$remaining, $outputs, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertIsArray($outputs);
+        self::assertCount(4, $outputs);
+        self::assertEquals("w", $outputs[0]);
+        self::assertEquals("h", $outputs[1]);
+        self::assertEquals("e", $outputs[2]);
+        self::assertEquals("n", $outputs[3]);
+        self::assertEquals("ce", $remaining);
+    }
+
+    public function testTupleFailureFirst()
+    {
+        $input = new Input("when");
+        $parser = tuple(tag("X"), tag("h"), tag("e"), tag("n"));
+        [$remaining, $outputs, $err] = $parser($input);
+        self::assertEquals(Err::Error($input, ErrorKind::Tag()), $err);
+        self::assertNull($outputs);
+        self::assertNull($remaining);
+    }
+
+    public function testTupleFailureSecond()
+    {
+        $input = new Input("when");
+        $parser = tuple(tag("w"), tag("X"), tag("e"), tag("n"));
+        [$remaining, $outputs, $err] = $parser($input);
+        self::assertEquals(Err::Error(new Input("hen"), ErrorKind::Tag()), $err);
+        self::assertNull($outputs);
+        self::assertNull($remaining);
+    }
+
+    public function testTupleFailureThird()
+    {
+        $input = new Input("when");
+        $parser = tuple(tag("w"), tag("h"), tag("X"), tag("n"));
+        [$remaining, $outputs, $err] = $parser($input);
+        self::assertEquals(Err::Error(new Input("en"), ErrorKind::Tag()), $err);
+        self::assertNull($outputs);
+        self::assertNull($remaining);
+    }
+
+    public function testTupleFailureFourth()
+    {
+        $input = new Input("when");
+        $parser = tuple(tag("w"), tag("h"), tag("e"), tag("X"));
+        [$remaining, $outputs, $err] = $parser($input);
+        self::assertEquals(Err::Error(new Input("n"), ErrorKind::Tag()), $err);
+        self::assertNull($outputs);
         self::assertNull($remaining);
     }
 
