@@ -1,9 +1,12 @@
 <?php
 
+use Parcom\Err;
 use Parcom\Input;
+use Parcom\Needed;
 use PHPUnit\Framework\TestCase;
 use function Parcom\Character\Streaming\alpha0;
 use function Parcom\Character\Streaming\alpha1;
+use function Parcom\Character\Streaming\digit0;
 
 /**
  * @covers \Parcom\Character\is_alphabetic
@@ -44,7 +47,7 @@ class CharacterStreamingTest extends TestCase
     {
         $input = new Input("");
         [$remaining, $output, $err] = alpha0()($input);
-        self::assertEquals(\Parcom\Err::Incomplete(\Parcom\Needed::Size(1)), $err);
+        self::assertEquals(Err::Incomplete(Needed::Size(1)), $err);
         self::assertNull($output);
         self::assertNull($remaining);
     }
@@ -71,7 +74,7 @@ class CharacterStreamingTest extends TestCase
     {
         $input = new Input("1def");
         [$remaining, $output, $err] = alpha1()($input);
-        self::assertEquals(\Parcom\Err::Error($input, \Parcom\ErrorKind::Alpha()), $err);
+        self::assertEquals(Err::Error($input, \Parcom\ErrorKind::Alpha()), $err);
         self::assertNull($output);
         self::assertNull($remaining);
     }
@@ -80,7 +83,43 @@ class CharacterStreamingTest extends TestCase
     {
         $input = new Input("");
         [$remaining, $output, $err] = alpha1()($input);
-        self::assertEquals(\Parcom\Err::Incomplete(\Parcom\Needed::Size(1)), $err);
+        self::assertEquals(Err::Incomplete(Needed::Size(1)), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testDigit0Success()
+    {
+        $input = new Input("123a");
+        [$remaining, $output, $err] = digit0()($input);
+        self::assertNull($err);
+        self::assertEquals("123", $output);
+        self::assertEquals("a", $remaining);
+    }
+
+    public function testDigit0SuccessRemaining()
+    {
+        $input = new Input("123a456");
+        [$remaining, $output, $err] = digit0()($input);
+        self::assertNull($err);
+        self::assertEquals("123", $output);
+        self::assertEquals("a456", $remaining);
+    }
+
+    public function testDigit0SuccessZero()
+    {
+        $input = new Input("a123");
+        [$remaining, $output, $err] = digit0()($input);
+        self::assertNull($err);
+        self::assertEquals("", $output);
+        self::assertEquals("a123", $remaining);
+    }
+
+    public function testDigit0Incomplete()
+    {
+        $input = new Input("");
+        [$remaining, $output, $err] = digit0()($input);
+        self::assertEquals(Err::Incomplete(Needed::Size(1)), $err);
         self::assertNull($output);
         self::assertNull($remaining);
     }
