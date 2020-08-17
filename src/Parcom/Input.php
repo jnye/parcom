@@ -111,7 +111,7 @@ class Input implements \ArrayAccess
     public function offsetGet($offset)
     {
         if ($offset >= $this->length) {
-            throw new OutOfRangeException();
+            throw new OutOfRangeException($offset);
         }
         return $this->data[$this->offset + $offset];
     }
@@ -124,5 +124,29 @@ class Input implements \ArrayAccess
     public function offsetUnset($offset)
     {
         // TODO: Implement offsetUnset() method.
+    }
+
+    public function position(callable $cond): int
+    {
+        if ($this->length <= 0) {
+            return -1;
+        }
+        $idx = 0;
+        while ($idx < $this->length) {
+            if ($cond($this->offsetGet($idx))) {
+                return $idx;
+            }
+            $idx++;
+        }
+        return -1;
+    }
+
+    public function slice_index(int $count): int
+    {
+        if ($count <= $this->length) {
+            return $count;
+        } else {
+            return -1;
+        }
     }
 }
