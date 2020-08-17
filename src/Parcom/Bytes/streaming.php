@@ -37,3 +37,10 @@ function take_till1(callable $cond): callable
         return $input->split_at_position1($cond, ErrorKind::TakeTill1());
     };
 }
+
+function take_while(callable $cond): callable
+{
+    return function (Input $input) use ($cond): IResult {
+        return $input->split_at_position(fn($c) => !$cond($c));
+    };
+}
