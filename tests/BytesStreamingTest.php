@@ -6,6 +6,7 @@ use Parcom\Input;
 use Parcom\Needed;
 use PHPUnit\Framework\TestCase;
 use function Parcom\Bytes\Streaming\is_a;
+use function Parcom\Bytes\Streaming\is_not;
 use function Parcom\Bytes\Streaming\tag;
 use function Parcom\Bytes\Streaming\tag_no_case;
 use function Parcom\Bytes\Streaming\take_till;
@@ -18,6 +19,7 @@ use function Parcom\Character\is_alphabetic;
 
 /**
  * @covers \Parcom\Bytes\Streaming\is_a
+ * @covers \Parcom\Bytes\Streaming\is_not
  * @covers \Parcom\Bytes\Streaming\tag
  * @covers \Parcom\Bytes\Streaming\tag_no_case
  * @covers \Parcom\Bytes\Streaming\take_until
@@ -54,6 +56,36 @@ class BytesStreamingTest extends TestCase
     {
         $input = new Input("");
         $parser = is_a("aex");
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Err::Incomplete(Needed::Size(1)), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testIsNotSuccess()
+    {
+        $input = new Input("example");
+        $parser = is_not("lmp");
+        [$remaining, $output, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertEquals("exa", $output);
+        self::assertEquals("mple", $remaining);
+    }
+
+    public function testIsNotIncompleteSome()
+    {
+        $input = new Input("exa");
+        $parser = is_not("ghi");
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Err::Incomplete(Needed::Size(1)), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testIsNotIncompleteNone()
+    {
+        $input = new Input("");
+        $parser = is_not("fop");
         [$remaining, $output, $err] = $parser($input);
         self::assertEquals(Err::Incomplete(Needed::Size(1)), $err);
         self::assertNull($output);
