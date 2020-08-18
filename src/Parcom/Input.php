@@ -2,9 +2,10 @@
 
 namespace Parcom;
 
+use ArrayAccess;
 use OutOfRangeException;
 
-class Input implements \ArrayAccess
+class Input implements ArrayAccess
 {
     private string $data;
     private int $length;
