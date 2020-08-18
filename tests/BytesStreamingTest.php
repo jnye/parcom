@@ -306,6 +306,8 @@ class BytesStreamingTest extends TestCase
         $input = new Input("");
         [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
         self::assertEquals(Err::Incomplete(Needed::Size(3)), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
     }
 
     public function testTakeWhileMNIncompletePartialMin()
@@ -313,6 +315,8 @@ class BytesStreamingTest extends TestCase
         $input = new Input("go");
         [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
         self::assertEquals(Err::Incomplete(Needed::Size(1)), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
     }
 
     public function testTakeWhileMNError()
@@ -320,6 +324,8 @@ class BytesStreamingTest extends TestCase
         $input = new Input("12345");
         [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
         self::assertEquals(Err::Error($input, ErrorKind::TakeWhileMN()), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
     }
 
 }
