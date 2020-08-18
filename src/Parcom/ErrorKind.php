@@ -12,6 +12,7 @@ class ErrorKind
     private const DIGIT = 'Digit';
     private const TAKE_WHILE1 = 'TakeWhile1';
     private const TAKE_WHILE_M_N= 'TakeWhileMN';
+    private const IS_A= 'IsA';
 
     private string $variant;
 
@@ -58,6 +59,11 @@ class ErrorKind
     public static function TakeWhileMN()
     {
         return new self(self::TAKE_WHILE_M_N);
+    }
+
+    public static function IsA()
+    {
+        return new self(self::IS_A);
     }
 
     public function __toString(): string

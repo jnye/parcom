@@ -5,6 +5,7 @@ use Parcom\ErrorKind;
 use Parcom\Input;
 use Parcom\Needed;
 use PHPUnit\Framework\TestCase;
+use function Parcom\Bytes\Streaming\is_a;
 use function Parcom\Bytes\Streaming\tag;
 use function Parcom\Bytes\Streaming\tag_no_case;
 use function Parcom\Bytes\Streaming\take_till;
@@ -16,6 +17,7 @@ use function Parcom\Bytes\Streaming\take_while_m_n;
 use function Parcom\Character\is_alphabetic;
 
 /**
+ * @covers \Parcom\Bytes\Streaming\is_a
  * @covers \Parcom\Bytes\Streaming\tag
  * @covers \Parcom\Bytes\Streaming\tag_no_case
  * @covers \Parcom\Bytes\Streaming\take_until
@@ -27,6 +29,36 @@ use function Parcom\Character\is_alphabetic;
  */
 class BytesStreamingTest extends TestCase
 {
+
+    public function testIsASuccess()
+    {
+        $input = new Input("example");
+        $parser = is_a("aex");
+        [$remaining, $output, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertEquals("exa", $output);
+        self::assertEquals("mple", $remaining);
+    }
+
+    public function testIsAIncompleteSome()
+    {
+        $input = new Input("exa");
+        $parser = is_a("aex");
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Err::Incomplete(Needed::Size(1)), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testIsAIncompleteNone()
+    {
+        $input = new Input("");
+        $parser = is_a("aex");
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Err::Incomplete(Needed::Size(1)), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
 
     public function testTagSuccessWithRemainder()
     {
