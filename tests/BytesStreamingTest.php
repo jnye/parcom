@@ -6,6 +6,7 @@ use Parcom\Input;
 use Parcom\Needed;
 use PHPUnit\Framework\TestCase;
 use function Parcom\Bytes\Streaming\tag;
+use function Parcom\Bytes\Streaming\tag_no_case;
 use function Parcom\Bytes\Streaming\take_till;
 use function Parcom\Bytes\Streaming\take_till1;
 use function Parcom\Bytes\Streaming\take_until;
@@ -16,6 +17,7 @@ use function Parcom\Character\is_alphabetic;
 
 /**
  * @covers \Parcom\Bytes\Streaming\tag
+ * @covers \Parcom\Bytes\Streaming\tag_no_case
  * @covers \Parcom\Bytes\Streaming\take_until
  * @covers \Parcom\Bytes\Streaming\take_till
  * @covers \Parcom\Bytes\Streaming\take_till1
@@ -65,6 +67,52 @@ class BytesStreamingTest extends TestCase
     {
         $input = new Input("football");
         $parser = tag("book");
+        [$left, $right, $err] = $parser($input);
+        self::assertNull($left);
+        self::assertNull($right);
+        self::assertNotNull($err);
+        self::assertEquals(Err::Error($input, ErrorKind::Tag()), $err);
+    }
+
+    public function testTagNoCaseSuccessWithRemainder()
+    {
+        $input = new Input("football");
+        $parser = tag_no_case("FOOT");
+        [$left, $right, $err] = $parser($input);
+        self::assertNotNull($left);
+        self::assertEquals("ball", $left);
+        self::assertNotNull($right);
+        self::assertEquals("foot", $right);
+        self::assertNull($err);
+    }
+
+    public function testTagNoCaseSuccessWithNoRemainder()
+    {
+        $input = new Input("football");
+        $parser = tag_no_case("FOOTBALL");
+        [$left, $right, $err] = $parser($input);
+        self::assertNotNull($left);
+        self::assertEquals("", $left);
+        self::assertNotNull($right);
+        self::assertEquals("football", $right);
+        self::assertNull($err);
+    }
+
+    public function testTagNoCaseIncomplete()
+    {
+        $input = new Input("foot");
+        $parser = tag_no_case("FOOTBALL");
+        [$left, $right, $err] = $parser($input);
+        self::assertNull($left);
+        self::assertNull($right);
+        self::assertNotNull($err);
+        self::assertEquals(Err::Incomplete(Needed::Size(4)), $err);
+    }
+
+    public function testTagNoCaseError()
+    {
+        $input = new Input("football");
+        $parser = tag_no_case("BOOK");
         [$left, $right, $err] = $parser($input);
         self::assertNull($left);
         self::assertNull($right);
