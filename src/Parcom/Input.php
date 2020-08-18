@@ -149,4 +149,21 @@ class Input implements \ArrayAccess
             return -1;
         }
     }
+
+    public function find_substring(Input $tag): int
+    {
+        $tagLength = $tag->input_length();
+        for ($offset = 0; $offset <= $this->length - $tagLength; $offset++) {
+            if ($this->substr($offset, $tagLength) == (string)$tag) {
+                return $offset;
+            }
+        }
+        return -1;
+    }
+
+    private function substr(int $offset, int $length): string
+    {
+        return substr($this->data, $this->offset + $offset, $length);
+    }
+
 }

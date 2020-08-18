@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use function Parcom\Bytes\Streaming\tag;
 use function Parcom\Bytes\Streaming\take_till;
 use function Parcom\Bytes\Streaming\take_till1;
+use function Parcom\Bytes\Streaming\take_until;
 use function Parcom\Bytes\Streaming\take_while;
 use function Parcom\Bytes\Streaming\take_while1;
 use function Parcom\Bytes\Streaming\take_while_m_n;
@@ -15,6 +16,7 @@ use function Parcom\Character\is_alphabetic;
 
 /**
  * @covers \Parcom\Bytes\Streaming\tag
+ * @covers \Parcom\Bytes\Streaming\take_until
  * @covers \Parcom\Bytes\Streaming\take_till
  * @covers \Parcom\Bytes\Streaming\take_till1
  * @covers \Parcom\Bytes\Streaming\take_while
@@ -68,6 +70,56 @@ class BytesStreamingTest extends TestCase
         self::assertNull($right);
         self::assertNotNull($err);
         self::assertEquals(Err::Error($input, ErrorKind::Tag()), $err);
+    }
+
+    public function testTakeUntilSuccessAll()
+    {
+        $input = new Input("breaker;");
+        $parser = take_until(new Input(";"));
+        [$remaining, $output, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertEquals("breaker", $output);
+        self::assertEquals(";", $remaining);
+    }
+
+    public function testTakeUntilSuccessRemaining()
+    {
+        $input = new Input("breaker;ship");
+        $parser = take_until(new Input(";"));
+        [$remaining, $output, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertEquals("breaker", $output);
+        self::assertEquals(";ship", $remaining);
+    }
+
+    public function testTakeUntilSuccessNothing()
+    {
+        $input = new Input(";break");
+        $parser = take_until(new Input(";"));
+        [$remaining, $output, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertEquals("", $output);
+        self::assertEquals(";break", $remaining);
+    }
+
+    public function testTakeUntilIncompletePartial()
+    {
+        $input = new Input("break");
+        $parser = take_until(new Input(";"));
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Err::Incomplete(Needed::Size(1)), (string)$err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testTakeUntilIncompleteNone()
+    {
+        $input = new Input("");
+        $parser = take_until(new Input(";"));
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Err::Incomplete(Needed::Size(1)), (string)$err);
+        self::assertNull($output);
+        self::assertNull($remaining);
     }
 
     public function testTakeTillSuccessAll()
