@@ -85,3 +85,10 @@ function take_while(callable $cond): callable
         return $input->split_at_position_complete(fn($c) => !$cond($c));
     };
 }
+
+function take_while1(callable $cond): callable
+{
+    return function (Input $input) use ($cond): IResult {
+        return $input->split_at_position1_complete(fn($c) => !$cond($c), ErrorKind::TakeWhile1());
+    };
+}

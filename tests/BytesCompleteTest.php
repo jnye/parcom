@@ -12,6 +12,7 @@ use function Parcom\Bytes\Complete\take_till;
 use function Parcom\Bytes\Complete\take_till1;
 use function Parcom\Bytes\Complete\take_until;
 use function Parcom\Bytes\Complete\take_while;
+use function Parcom\Bytes\Complete\take_while1;
 use function Parcom\Character\is_alphabetic;
 
 /**
@@ -23,6 +24,7 @@ use function Parcom\Character\is_alphabetic;
  * @covers \Parcom\Bytes\Complete\take_till
  * @covers \Parcom\Bytes\Complete\take_till1
  * @covers \Parcom\Bytes\Complete\take_while
+ * @covers \Parcom\Bytes\Complete\take_while1
  */
 class BytesCompleteTest extends TestCase
 {
@@ -324,6 +326,42 @@ class BytesCompleteTest extends TestCase
         self::assertNull($err);
         self::assertEquals("", $output);
         self::assertEquals("", $remaining);
+    }
+
+    public function testTakeWhile1SuccessRemaining()
+    {
+        $input = new Input("abc1");
+        [$remaining, $output, $err] = take_while1(fn($c) => is_alphabetic($c))($input);
+        self::assertNull($err);
+        self::assertEquals("abc", $output);
+        self::assertEquals("1", $remaining);
+    }
+
+    public function testTakeWhile1Error()
+    {
+        $input = new Input("123");
+        [$remaining, $output, $err] = take_while1(fn($c) => is_alphabetic($c))($input);
+        self::assertEquals(Err::Error($input, ErrorKind::TakeWhile1()), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testTakeWhile1SuccessAll()
+    {
+        $input = new Input("abc");
+        [$remaining, $output, $err] = take_while1(fn($c) => is_alphabetic($c))($input);
+        self::assertNull($err);
+        self::assertEquals("abc", $output);
+        self::assertEquals("", $remaining);
+    }
+
+    public function testTakeWhile1Eof()
+    {
+        $input = new Input("");
+        [$remaining, $output, $err] = take_while1(fn($c) => is_alphabetic($c))($input);
+        self::assertEquals(Err::Error($input, ErrorKind::TakeWhile1()), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
     }
 
 }
