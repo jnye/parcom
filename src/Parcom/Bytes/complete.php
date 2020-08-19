@@ -38,6 +38,22 @@ function tag(string $tag): callable
     };
 }
 
+function tag_no_case(string $tag): callable
+{
+    return function (Input $input) use ($tag): IResult {
+        $tagLength = strlen($tag);
+        $inputLength = $input->input_length();
+        if ($tagLength > $inputLength) {
+            return IResult::Err(Err::Error($input, ErrorKind::Tag()));
+        }
+        [$remaining, $output] = $input->take_split($tagLength);
+        if (strtolower((string)$tag) == strtolower((string)$output)) {
+            return IResult::Ok($remaining, $output);
+        }
+        return IResult::Err(Err::Error($input, ErrorKind::Tag()));
+    };
+}
+
 function take_till(callable $cond): callable
 {
     return function (Input $input) use ($cond): IResult {
