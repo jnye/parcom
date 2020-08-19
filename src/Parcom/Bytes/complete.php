@@ -54,6 +54,17 @@ function tag_no_case(string $tag): callable
     };
 }
 
+function take_until(Input $tag): callable
+{
+    return function (Input $input) use ($tag): IResult {
+        $offset = $input->find_substring($tag);
+        if ($offset == -1) {
+            return IResult::Err(Err::Error($input, ErrorKind::TakeUntil()));
+        }
+        return IResult::Ok(...$input->take_split($offset));
+    };
+}
+
 function take_till(callable $cond): callable
 {
     return function (Input $input) use ($cond): IResult {

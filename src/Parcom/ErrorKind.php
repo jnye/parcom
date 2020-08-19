@@ -11,9 +11,10 @@ class ErrorKind
     private const ALPHA = 'Alpha';
     private const DIGIT = 'Digit';
     private const TAKE_WHILE1 = 'TakeWhile1';
-    private const TAKE_WHILE_M_N= 'TakeWhileMN';
-    private const IS_A= 'IsA';
-    private const IS_NOT= 'IsNot';
+    private const TAKE_WHILE_M_N = 'TakeWhileMN';
+    private const IS_A = 'IsA';
+    private const IS_NOT = 'IsNot';
+    private const TAKE_UNTIL = 'TakeUntil';
 
     private string $variant;
 
@@ -70,6 +71,11 @@ class ErrorKind
     public static function IsNot()
     {
         return new self(self::IS_NOT);
+    }
+
+    public static function TakeUntil()
+    {
+        return new self(self::TAKE_UNTIL);
     }
 
     public function __toString(): string
