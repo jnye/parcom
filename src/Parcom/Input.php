@@ -167,4 +167,9 @@ class Input implements ArrayAccess
         return substr($this->data, $this->offset + $offset, $length);
     }
 
+    public function offset(Input $other)
+    {
+        return $other->offset - $this->offset;
+    }
+
 }

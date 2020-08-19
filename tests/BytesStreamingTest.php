@@ -5,6 +5,7 @@ use Parcom\ErrorKind;
 use Parcom\Input;
 use Parcom\Needed;
 use PHPUnit\Framework\TestCase;
+use function Parcom\Bytes\Streaming\escaped;
 use function Parcom\Bytes\Streaming\is_a;
 use function Parcom\Bytes\Streaming\is_not;
 use function Parcom\Bytes\Streaming\tag;
@@ -15,9 +16,12 @@ use function Parcom\Bytes\Streaming\take_until;
 use function Parcom\Bytes\Streaming\take_while;
 use function Parcom\Bytes\Streaming\take_while1;
 use function Parcom\Bytes\Streaming\take_while_m_n;
+use function Parcom\Character\Complete\alpha1;
+use function Parcom\Character\Complete\digit1;
 use function Parcom\Character\is_alphabetic;
 
 /**
+ * @covers \Parcom\Bytes\Streaming\escaped
  * @covers \Parcom\Bytes\Streaming\is_a
  * @covers \Parcom\Bytes\Streaming\is_not
  * @covers \Parcom\Bytes\Streaming\tag
@@ -31,6 +35,36 @@ use function Parcom\Character\is_alphabetic;
  */
 class BytesStreamingTest extends TestCase
 {
+
+    public function testEscapedSuccess()
+    {
+        $input = new Input("a\\1;");
+        $parser = escaped(alpha1(), '\\', digit1());
+        [$remaining, $output, $err] = $parser($input);
+        self::assertNull($err);
+        self::assertEquals("a\\1", $output);
+        self::assertEquals(";", $remaining);
+    }
+
+    public function testEscapedError()
+    {
+        $input = new Input("a\\b;");
+        $parser = escaped(alpha1(), '\\', digit1());
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Err::Error(new Input("b;"), ErrorKind::Digit()), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testEscapedIncomplete()
+    {
+        $input = new Input("a\\1");
+        $parser = escaped(alpha1(), '\\', digit1());
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Err::Incomplete(Needed::Unknown()), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
 
     public function testIsASuccess()
     {
