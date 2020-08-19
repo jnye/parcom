@@ -11,6 +11,8 @@ use function Parcom\Bytes\Complete\tag_no_case;
 use function Parcom\Bytes\Complete\take_till;
 use function Parcom\Bytes\Complete\take_till1;
 use function Parcom\Bytes\Complete\take_until;
+use function Parcom\Bytes\Complete\take_while;
+use function Parcom\Character\is_alphabetic;
 
 /**
  * @covers \Parcom\Bytes\Complete\is_a
@@ -20,6 +22,7 @@ use function Parcom\Bytes\Complete\take_until;
  * @covers \Parcom\Bytes\Complete\take_until
  * @covers \Parcom\Bytes\Complete\take_till
  * @covers \Parcom\Bytes\Complete\take_till1
+ * @covers \Parcom\Bytes\Complete\take_while
  */
 class BytesCompleteTest extends TestCase
 {
@@ -294,6 +297,33 @@ class BytesCompleteTest extends TestCase
         self::assertNull($err);
         self::assertEquals("", $output);
         self::assertEquals("break", $remaining);
+    }
+
+    public function testTakeWhileSuccessRemaining()
+    {
+        $input = new Input("abc1");
+        [$remaining, $output, $err] = take_while(fn($c) => is_alphabetic($c))($input);
+        self::assertNull($err);
+        self::assertEquals("abc", $output);
+        self::assertEquals("1", $remaining);
+    }
+
+    public function testTakeWhileSuccessAll()
+    {
+        $input = new Input("abc");
+        [$remaining, $output, $err] = take_while(fn($c) => is_alphabetic($c))($input);
+        self::assertNull($err);
+        self::assertEquals("abc", $output);
+        self::assertEquals("", $remaining);
+    }
+
+    public function testTakeWhileSuccessNone()
+    {
+        $input = new Input("");
+        [$remaining, $output, $err] = take_while(fn($c) => is_alphabetic($c))($input);
+        self::assertNull($err);
+        self::assertEquals("", $output);
+        self::assertEquals("", $remaining);
     }
 
 }
