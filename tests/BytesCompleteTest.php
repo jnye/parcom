@@ -13,6 +13,7 @@ use function Parcom\Bytes\Complete\take_till1;
 use function Parcom\Bytes\Complete\take_until;
 use function Parcom\Bytes\Complete\take_while;
 use function Parcom\Bytes\Complete\take_while1;
+use function Parcom\Bytes\Complete\take_while_m_n;
 use function Parcom\Character\is_alphabetic;
 
 /**
@@ -25,6 +26,7 @@ use function Parcom\Character\is_alphabetic;
  * @covers \Parcom\Bytes\Complete\take_till1
  * @covers \Parcom\Bytes\Complete\take_while
  * @covers \Parcom\Bytes\Complete\take_while1
+ * @covers \Parcom\Bytes\Complete\take_while_m_n
  */
 class BytesCompleteTest extends TestCase
 {
@@ -360,6 +362,69 @@ class BytesCompleteTest extends TestCase
         $input = new Input("");
         [$remaining, $output, $err] = take_while1(fn($c) => is_alphabetic($c))($input);
         self::assertEquals(Err::Error($input, ErrorKind::TakeWhile1()), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testTakeWhileMNSuccessInBetweenMinMaxRemaining()
+    {
+        $input = new Input("peach123");
+        [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
+        self::assertNull($err);
+        self::assertEquals("peach", $output);
+        self::assertEquals("123", $remaining);
+    }
+
+    public function testTakeWhileMNSuccessMaxWithRemaining()
+    {
+        $input = new Input("squeaky");
+        [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
+        self::assertNull($err);
+        self::assertEquals("squeak", $output);
+        self::assertEquals("y", $remaining);
+    }
+
+    public function testTakeWhileMNSuccessMaxWithRemaining2()
+    {
+        $input = new Input("buttons1");
+        [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
+        self::assertNull($err);
+        self::assertEquals("button", $output);
+        self::assertEquals("s1", $remaining);
+    }
+
+    public function testTakeWhileMNSuccessInBetweenMinMaxEof()
+    {
+        $input = new Input("peach");
+        [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
+        self::assertNull($err);
+        self::assertEquals("peach", $output);
+        self::assertEquals("", $remaining);
+    }
+
+    public function testTakeWhileMNErrorEof()
+    {
+        $input = new Input("");
+        [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
+        self::assertEquals(Err::Error($input, ErrorKind::TakeWhileMN()), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testTakeWhileMNErrorUnderMin()
+    {
+        $input = new Input("go");
+        [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
+        self::assertEquals(Err::Error($input, ErrorKind::TakeWhileMN()), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testTakeWhileMNErrorNone()
+    {
+        $input = new Input("12345");
+        [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
+        self::assertEquals(Err::Error($input, ErrorKind::TakeWhileMN()), $err);
         self::assertNull($output);
         self::assertNull($remaining);
     }

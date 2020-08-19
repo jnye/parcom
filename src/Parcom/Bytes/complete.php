@@ -92,3 +92,30 @@ function take_while1(callable $cond): callable
         return $input->split_at_position1_complete(fn($c) => !$cond($c), ErrorKind::TakeWhile1());
     };
 }
+
+function take_while_m_n(int $m, int $n, callable $cond): callable
+{
+    return function (Input $input) use ($m, $n, $cond): IResult {
+        $idx = $input->position(fn($c) => !$cond($c));
+        if ($idx == -1) {
+            $inputLength = $input->input_length();
+            if ($inputLength >= $n) {
+                return IResult::Ok(...$input->take_split($n));
+            } else if ($inputLength >= $m) {
+                return IResult::Ok(...$input->take_split($inputLength));
+            } else {
+                return IResult::Err(Err::Error($input, ErrorKind::TakeWhileMN()));
+            }
+        } else {
+            if ($idx >= $m) {
+                if ($idx <= $n) {
+                    return IResult::Ok(...$input->take_split($idx));
+                } else {
+                    return IResult::Ok(...$input->take_split($n));
+                }
+            } else {
+                return IResult::Err(Err::Error($input, ErrorKind::TakeWhileMN()));
+            }
+        }
+    };
+}
