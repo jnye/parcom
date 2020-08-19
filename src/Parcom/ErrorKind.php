@@ -13,6 +13,7 @@ class ErrorKind
     private const TAKE_WHILE1 = 'TakeWhile1';
     private const TAKE_WHILE_M_N= 'TakeWhileMN';
     private const IS_A= 'IsA';
+    private const IS_NOT= 'IsNot';
 
     private string $variant;
 
@@ -64,6 +65,11 @@ class ErrorKind
     public static function IsA()
     {
         return new self(self::IS_A);
+    }
+
+    public static function IsNot()
+    {
+        return new self(self::IS_NOT);
     }
 
     public function __toString(): string

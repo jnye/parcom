@@ -15,6 +15,14 @@ function is_a(string $arr): callable
     };
 }
 
+function is_not(string $arr): callable
+{
+    return function (Input $input) use ($arr) {
+        $errKind = ErrorKind::IsNot();
+        return $input->split_at_position1_complete(fn($c) => strpos($arr, $c) !== false, $errKind);
+    };
+}
+
 function tag(string $tag): callable
 {
     return function (Input $input) use ($tag): IResult {
