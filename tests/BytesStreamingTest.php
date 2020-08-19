@@ -66,6 +66,26 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
+    public function testEscapedIncompleteEof()
+    {
+        $input = new Input("");
+        $parser = escaped(alpha1(), '\\', digit1());
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Err::Incomplete(Needed::Unknown()), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
+    public function testEscapedIncompleteNoControlChar()
+    {
+        $input = new Input("a");
+        $parser = escaped(alpha1(), '\\', digit1());
+        [$remaining, $output, $err] = $parser($input);
+        self::assertEquals(Err::Incomplete(Needed::Unknown()), $err);
+        self::assertNull($output);
+        self::assertNull($remaining);
+    }
+
     public function testIsASuccess()
     {
         $input = new Input("example");
