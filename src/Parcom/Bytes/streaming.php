@@ -43,6 +43,45 @@ function escaped(callable $normal, string $controlChar, callable $escapable): ca
     };
 }
 
+
+function escaped_transform(callable $normal, string $controlChar, callable $transform): callable
+{
+    return function (Input $input) use ($normal, $controlChar, $transform): IResult {
+        $i = $input;
+        $res = new Input("");
+        while ($i->input_length() > 0) {
+            [$remaining, $output, $err] = $normal($i);
+            if ($err === null) {
+                $res->extend($output);
+                if ($remaining->input_length() == 0) {
+                    return IResult::Err(Err::Incomplete(Needed::Unknown()));
+                } else {
+                    $i = $remaining;
+                }
+            } else {
+                if ($i[0] == $controlChar) {
+                    [$r,] = $i->take_split(1);
+                    [$remaining, $output, $err] = $transform($r);
+                    if ($err === null) {
+                        $res->extend($output);
+                        if ($remaining->input_length() == 0) {
+                            return IResult::Err(Err::Incomplete(Needed::Unknown()));
+                        } else {
+                            $i = $remaining;
+                        }
+                    } else {
+                        return IResult::Err($err);
+                    }
+                } else {
+                    $index = $input->offset($i);
+                    return IResult::Ok($input->take_split($index)[0], $res);
+                }
+            }
+        }
+        return IResult::Err(Err::Incomplete(Needed::Unknown()));
+    };
+}
+
 function is_a(string $arr): callable
 {
     return function (Input $input) use ($arr) {

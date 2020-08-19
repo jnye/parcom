@@ -172,4 +172,10 @@ class Input implements ArrayAccess
         return $other->offset - $this->offset;
     }
 
+    public function extend(string $output)
+    {
+        $this->data .= $output;
+        $this->length += strlen($output);
+    }
+
 }
