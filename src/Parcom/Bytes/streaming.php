@@ -43,7 +43,6 @@ function escaped(callable $normal, string $controlChar, callable $escapable): ca
     };
 }
 
-
 function escaped_transform(callable $normal, string $controlChar, callable $transform): callable
 {
     return function (Input $input) use ($normal, $controlChar, $transform): IResult {

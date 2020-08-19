@@ -7,6 +7,41 @@ use Parcom\ErrorKind;
 use Parcom\Input;
 use Parcom\IResult;
 
+function escaped(callable $normal, string $controlChar, callable $escapable): callable
+{
+    return function (Input $input) use ($normal, $controlChar, $escapable): IResult {
+        $i = $input;
+        while ($i->input_length() > 0) {
+            [$remaining, , $err] = $normal($i);
+            if ($err === null) {
+                if ($remaining->input_length() == 0) {
+                    return IResult::Err(Err::Error($remaining, ErrorKind::Escaped()));
+                } else {
+                    $i = $remaining;
+                }
+            } else {
+                if ($i[0] == $controlChar) {
+                    [$r,] = $i->take_split(1);
+                    [$remaining, , $err] = $escapable($r);
+                    if ($err === null) {
+                        if ($remaining->input_length() == 0) {
+                            return IResult::Ok(...$input->take_split($input->input_length()));
+                        } else {
+                            $i = $remaining;
+                        }
+                    } else {
+                        return IResult::Err($err);
+                    }
+                } else {
+                    $index = $input->offset($i);
+                    return IResult::Ok(...$input->take_split($index));
+                }
+            }
+        }
+        return IResult::Ok(...$input->take_split($input->input_length()));
+    };
+}
+
 function is_a(string $arr): callable
 {
     return function (Input $input) use ($arr) {

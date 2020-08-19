@@ -15,6 +15,7 @@ class ErrorKind
     private const IS_A = 'IsA';
     private const IS_NOT = 'IsNot';
     private const TAKE_UNTIL = 'TakeUntil';
+    private const ESCAPED = 'Escaped';
 
     private string $variant;
 
@@ -76,6 +77,11 @@ class ErrorKind
     public static function TakeUntil()
     {
         return new self(self::TAKE_UNTIL);
+    }
+
+    public static function Escaped()
+    {
+        return new self(self::ESCAPED);
     }
 
     public function __toString(): string
