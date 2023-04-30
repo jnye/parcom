@@ -1,7 +1,7 @@
 Parcom
 ======
 
-A parser combinator library for PHP.
+A parser combinator library for PHP 8+.
 
 Installing
 ----------
