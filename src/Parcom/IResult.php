@@ -51,7 +51,7 @@ class IResult implements ArrayAccess
         return $this->err;
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         if ($offset === 0) {
             return isset($this->remaining);
@@ -64,7 +64,7 @@ class IResult implements ArrayAccess
         }
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         if ($offset === 0) {
             return $this->remaining;
@@ -80,12 +80,12 @@ class IResult implements ArrayAccess
         }
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         throw new BadMethodCallException();
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         throw new BadMethodCallException();
     }

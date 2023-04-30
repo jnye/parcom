@@ -104,12 +104,13 @@ class Input implements ArrayAccess
         return $result;
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         // TODO: Implement offsetExists() method.
+        return false;
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         if ($offset >= $this->length) {
             throw new OutOfRangeException($offset);
@@ -117,12 +118,12 @@ class Input implements ArrayAccess
         return $this->data[$this->offset + $offset];
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         // TODO: Implement offsetSet() method.
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         // TODO: Implement offsetUnset() method.
     }
