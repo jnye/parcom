@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 class InputTest extends TestCase
 {
 
-    public function testConstructionSimple()
+    public function testConstructionSimple(): void
     {
         $input = new Input("cat");
         self::assertNotNull($input);
@@ -17,7 +17,7 @@ class InputTest extends TestCase
         self::assertSame(3, $input->input_length());
     }
 
-    public function testConstructionComplex()
+    public function testConstructionComplex(): void
     {
         $input = new Input("scatter", 1, 3);
         self::assertNotNull($input);
@@ -25,7 +25,7 @@ class InputTest extends TestCase
         self::assertSame(3, $input->input_length());
     }
 
-    public function testTake()
+    public function testTake(): void
     {
         $input = new Input("dog");
         $result = $input->take(2);
@@ -33,7 +33,7 @@ class InputTest extends TestCase
         self::assertEquals("do", $result);
     }
 
-    public function testTakeSplit()
+    public function testTakeSplit(): void
     {
         $input = new Input("aircraft");
         $result = $input->take_split(3);

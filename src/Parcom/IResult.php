@@ -6,12 +6,16 @@ use ArrayAccess;
 use BadMethodCallException;
 use OutOfRangeException;
 
+/**
+ * @implements ArrayAccess<int, Input|Input[]|Err>
+ */
 class IResult implements ArrayAccess
 {
 
     private ?Input $remaining;
     private ?Input $output;
     private ?Err $err;
+    /** @var Input[]|null  */
     private ?array $outputs;
 
     private function __construct(?Input $remaining, ?Input $output, ?Err $err, Input ...$outputs)
@@ -60,7 +64,7 @@ class IResult implements ArrayAccess
         } else if ($offset === 2) {
             return isset($this->err);
         } else {
-            throw new OutOfRangeException($offset);
+            throw new OutOfRangeException((string) $offset);
         }
     }
 
@@ -76,7 +80,7 @@ class IResult implements ArrayAccess
         } else if ($offset === 2) {
             return $this->err;
         } else {
-            throw new OutOfRangeException($offset);
+            throw new OutOfRangeException((string) $offset);
         }
     }
 

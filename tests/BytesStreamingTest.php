@@ -39,7 +39,7 @@ use function Parcom\Character\is_alphabetic;
 class BytesStreamingTest extends TestCase
 {
 
-    public function testEscapedSuccess()
+    public function testEscapedSuccess(): void
     {
         $input = new Input("a\\1;");
         $parser = escaped(alpha1(), '\\', digit1());
@@ -49,7 +49,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals(";", $remaining);
     }
 
-    public function testEscapedError()
+    public function testEscapedError(): void
     {
         $input = new Input("a\\b;");
         $parser = escaped(alpha1(), '\\', digit1());
@@ -59,7 +59,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testEscapedIncomplete()
+    public function testEscapedIncomplete(): void
     {
         $input = new Input("a\\1");
         $parser = escaped(alpha1(), '\\', digit1());
@@ -69,7 +69,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testEscapedIncompleteEof()
+    public function testEscapedIncompleteEof(): void
     {
         $input = new Input("");
         $parser = escaped(alpha1(), '\\', digit1());
@@ -79,7 +79,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testEscapedIncompleteNoControlChar()
+    public function testEscapedIncompleteNoControlChar(): void
     {
         $input = new Input("a");
         $parser = escaped(alpha1(), '\\', digit1());
@@ -89,7 +89,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testEscapedTransformSuccess()
+    public function testEscapedTransformSuccess(): void
     {
         $input = new Input("a\\a;");
         $parser = escaped_transform(alpha1(), '\\', function (Input $i) {
@@ -106,7 +106,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals(";", $remaining);
     }
 
-    public function testEscapedTransformError()
+    public function testEscapedTransformError(): void
     {
         $input = new Input("a\\1;");
         $parser = escaped_transform(alpha1(), '\\', function (Input $i) {
@@ -123,7 +123,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testEscapedTransformIncomplete()
+    public function testEscapedTransformIncomplete(): void
     {
         $input = new Input("a\\a");
         $parser = escaped_transform(alpha1(), '\\', function (Input $i) {
@@ -140,7 +140,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testEscapedTransformIncompleteEof()
+    public function testEscapedTransformIncompleteEof(): void
     {
         $input = new Input("");
         $parser = escaped_transform(alpha1(), '\\', function (Input $i) {
@@ -157,7 +157,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testEscapedTransformIncompleteNoControlChar()
+    public function testEscapedTransformIncompleteNoControlChar(): void
     {
         $input = new Input("a");
         $parser = escaped_transform(alpha1(), '\\', function (Input $i) {
@@ -174,7 +174,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testIsASuccess()
+    public function testIsASuccess(): void
     {
         $input = new Input("example");
         $parser = is_a("aex");
@@ -184,7 +184,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals("mple", $remaining);
     }
 
-    public function testIsAIncompleteSome()
+    public function testIsAIncompleteSome(): void
     {
         $input = new Input("exa");
         $parser = is_a("aex");
@@ -194,7 +194,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testIsAIncompleteNone()
+    public function testIsAIncompleteNone(): void
     {
         $input = new Input("");
         $parser = is_a("aex");
@@ -204,7 +204,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testIsNotSuccess()
+    public function testIsNotSuccess(): void
     {
         $input = new Input("example");
         $parser = is_not("lmp");
@@ -214,7 +214,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals("mple", $remaining);
     }
 
-    public function testIsNotIncompleteSome()
+    public function testIsNotIncompleteSome(): void
     {
         $input = new Input("exa");
         $parser = is_not("ghi");
@@ -224,7 +224,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testIsNotIncompleteNone()
+    public function testIsNotIncompleteNone(): void
     {
         $input = new Input("");
         $parser = is_not("fop");
@@ -234,7 +234,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTagSuccessWithRemainder()
+    public function testTagSuccessWithRemainder(): void
     {
         $input = new Input("football");
         $parser = tag("foot");
@@ -246,7 +246,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($err);
     }
 
-    public function testTagSuccessWithNoRemainder()
+    public function testTagSuccessWithNoRemainder(): void
     {
         $input = new Input("football");
         $parser = tag("football");
@@ -258,7 +258,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($err);
     }
 
-    public function testTagIncomplete()
+    public function testTagIncomplete(): void
     {
         $input = new Input("foot");
         $parser = tag("football");
@@ -269,7 +269,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals(Err::Incomplete(Needed::Size(4)), $err);
     }
 
-    public function testTagError()
+    public function testTagError(): void
     {
         $input = new Input("football");
         $parser = tag("book");
@@ -280,7 +280,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals(Err::Error($input, ErrorKind::Tag()), $err);
     }
 
-    public function testTagNoCaseSuccessWithRemainder()
+    public function testTagNoCaseSuccessWithRemainder(): void
     {
         $input = new Input("football");
         $parser = tag_no_case("FOOT");
@@ -292,7 +292,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($err);
     }
 
-    public function testTagNoCaseSuccessWithNoRemainder()
+    public function testTagNoCaseSuccessWithNoRemainder(): void
     {
         $input = new Input("football");
         $parser = tag_no_case("FOOTBALL");
@@ -304,7 +304,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($err);
     }
 
-    public function testTagNoCaseIncomplete()
+    public function testTagNoCaseIncomplete(): void
     {
         $input = new Input("foot");
         $parser = tag_no_case("FOOTBALL");
@@ -315,7 +315,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals(Err::Incomplete(Needed::Size(4)), $err);
     }
 
-    public function testTagNoCaseError()
+    public function testTagNoCaseError(): void
     {
         $input = new Input("football");
         $parser = tag_no_case("BOOK");
@@ -326,7 +326,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals(Err::Error($input, ErrorKind::Tag()), $err);
     }
 
-    public function testTakeUntilSuccessAll()
+    public function testTakeUntilSuccessAll(): void
     {
         $input = new Input("breaker;");
         $parser = take_until(new Input(";"));
@@ -336,7 +336,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals(";", $remaining);
     }
 
-    public function testTakeUntilSuccessRemaining()
+    public function testTakeUntilSuccessRemaining(): void
     {
         $input = new Input("breaker;ship");
         $parser = take_until(new Input(";"));
@@ -346,7 +346,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals(";ship", $remaining);
     }
 
-    public function testTakeUntilSuccessNothing()
+    public function testTakeUntilSuccessNothing(): void
     {
         $input = new Input(";break");
         $parser = take_until(new Input(";"));
@@ -356,7 +356,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals(";break", $remaining);
     }
 
-    public function testTakeUntilIncompletePartial()
+    public function testTakeUntilIncompletePartial(): void
     {
         $input = new Input("break");
         $parser = take_until(new Input(";"));
@@ -366,7 +366,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTakeUntilIncompleteNone()
+    public function testTakeUntilIncompleteNone(): void
     {
         $input = new Input("");
         $parser = take_until(new Input(";"));
@@ -376,7 +376,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTakeTillSuccessAll()
+    public function testTakeTillSuccessAll(): void
     {
         $input = new Input("breaker;");
         $parser = take_till(fn($c) => $c == ';');
@@ -386,7 +386,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals(";", $remaining);
     }
 
-    public function testTakeTillSuccessRemaining()
+    public function testTakeTillSuccessRemaining(): void
     {
         $input = new Input("breaker;ship");
         $parser = take_till(fn($c) => $c == ';');
@@ -396,7 +396,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals(";ship", $remaining);
     }
 
-    public function testTakeTillSuccessNothing()
+    public function testTakeTillSuccessNothing(): void
     {
         $input = new Input(";break");
         $parser = take_till(fn($c) => $c == ';');
@@ -406,7 +406,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals(";break", $remaining);
     }
 
-    public function testTakeTillIncomplete()
+    public function testTakeTillIncomplete(): void
     {
         $input = new Input("break");
         $parser = take_till(fn($c) => $c == ';');
@@ -416,7 +416,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTakeTill1SuccessAll()
+    public function testTakeTill1SuccessAll(): void
     {
         $input = new Input("breaker;");
         $parser = take_till1(fn($c) => $c == ';');
@@ -426,7 +426,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals(";", $remaining);
     }
 
-    public function testTakeTill1SuccessRemaining()
+    public function testTakeTill1SuccessRemaining(): void
     {
         $input = new Input("breaker;ship");
         $parser = take_till1(fn($c) => $c == ';');
@@ -436,7 +436,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals(";ship", $remaining);
     }
 
-    public function testTakeTill1Error()
+    public function testTakeTill1Error(): void
     {
         $input = new Input(";break");
         $parser = take_till1(fn($c) => $c == ';');
@@ -446,7 +446,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($right);
     }
 
-    public function testTakeTill1Incomplete()
+    public function testTakeTill1Incomplete(): void
     {
         $input = new Input("break");
         $parser = take_till1(fn($c) => $c == ';');
@@ -456,7 +456,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($right);
     }
 
-    public function testTakeWhileSuccess()
+    public function testTakeWhileSuccess(): void
     {
         $input = new Input("abc1");
         [$remaining, $output, $err] = take_while(fn($c) => is_alphabetic($c))($input);
@@ -465,7 +465,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals("1", $remaining);
     }
 
-    public function testTakeWhileIncomplete()
+    public function testTakeWhileIncomplete(): void
     {
         $input = new Input("abc");
         [$remaining, $output, $err] = take_while(fn($c) => is_alphabetic($c))($input);
@@ -474,7 +474,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTakeWhileEof()
+    public function testTakeWhileEof(): void
     {
         $input = new Input("");
         [$remaining, $output, $err] = take_while(fn($c) => is_alphabetic($c))($input);
@@ -483,7 +483,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTakeWhile1Success()
+    public function testTakeWhile1Success(): void
     {
         $input = new Input("abc1");
         [$remaining, $output, $err] = take_while1(fn($c) => is_alphabetic($c))($input);
@@ -492,7 +492,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals("1", $remaining);
     }
 
-    public function testTakeWhile1Error()
+    public function testTakeWhile1Error(): void
     {
         $input = new Input("123");
         [$remaining, $output, $err] = take_while1(fn($c) => is_alphabetic($c))($input);
@@ -501,7 +501,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTakeWhile1Incomplete()
+    public function testTakeWhile1Incomplete(): void
     {
         $input = new Input("abc");
         [$remaining, $output, $err] = take_while1(fn($c) => is_alphabetic($c))($input);
@@ -510,7 +510,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTakeWhile1Eof()
+    public function testTakeWhile1Eof(): void
     {
         $input = new Input("");
         [$remaining, $output, $err] = take_while1(fn($c) => is_alphabetic($c))($input);
@@ -519,7 +519,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTakeWhileMNSuccess()
+    public function testTakeWhileMNSuccess(): void
     {
         $input = new Input("peach123");
         [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
@@ -528,7 +528,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals("123", $remaining);
     }
 
-    public function testTakeWhileMNSuccessMaxWithEof()
+    public function testTakeWhileMNSuccessMaxWithEof(): void
     {
         $input = new Input("squeaky");
         [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
@@ -537,7 +537,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals("y", $remaining);
     }
 
-    public function testTakeWhileMNSuccessMaxWithCondition()
+    public function testTakeWhileMNSuccessMaxWithCondition(): void
     {
         $input = new Input("buttons1");
         [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
@@ -546,7 +546,7 @@ class BytesStreamingTest extends TestCase
         self::assertEquals("s1", $remaining);
     }
 
-    public function testTakeWhileMNIncompleteMax()
+    public function testTakeWhileMNIncompleteMax(): void
     {
         $input = new Input("peach");
         [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
@@ -555,7 +555,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTakeWhileMNIncompleteEmptyMin()
+    public function testTakeWhileMNIncompleteEmptyMin(): void
     {
         $input = new Input("");
         [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
@@ -564,7 +564,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTakeWhileMNIncompletePartialMin()
+    public function testTakeWhileMNIncompletePartialMin(): void
     {
         $input = new Input("go");
         [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);
@@ -573,7 +573,7 @@ class BytesStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTakeWhileMNError()
+    public function testTakeWhileMNError(): void
     {
         $input = new Input("12345");
         [$remaining, $output, $err] = take_while_m_n(3, 6, fn($c) => is_alphabetic($c))($input);

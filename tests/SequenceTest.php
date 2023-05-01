@@ -23,7 +23,7 @@ use function Parcom\Sequence\tuple;
 class SequenceTest extends TestCase
 {
 
-    public function testDelimitedSuccess()
+    public function testDelimitedSuccess(): void
     {
         $input = new Input("abc");
         $parser = delimited(tag("a"), tag("b"), tag("c"));
@@ -33,7 +33,7 @@ class SequenceTest extends TestCase
         self::assertEquals("", $remaining);
     }
 
-    public function testDelimitedSuccessRemainder()
+    public function testDelimitedSuccessRemainder(): void
     {
         $input = new Input("abcd");
         $parser = delimited(tag("a"), tag("b"), tag("c"));
@@ -43,7 +43,7 @@ class SequenceTest extends TestCase
         self::assertEquals("d", $remaining);
     }
 
-    public function testDelimitedErrorFirst()
+    public function testDelimitedErrorFirst(): void
     {
         $input = new Input("Xbc");
         $parser = delimited(tag("a"), tag("b"), tag("c"));
@@ -53,7 +53,7 @@ class SequenceTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testDelimitedErrorMiddle()
+    public function testDelimitedErrorMiddle(): void
     {
         $input = new Input("aXc");
         $parser = delimited(tag("a"), tag("b"), tag("c"));
@@ -63,7 +63,7 @@ class SequenceTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testDelimitedErrorLast()
+    public function testDelimitedErrorLast(): void
     {
         $input = new Input("abX");
         $parser = delimited(tag("a"), tag("b"), tag("c"));
@@ -73,7 +73,7 @@ class SequenceTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testPairSuccess()
+    public function testPairSuccess(): void
     {
         $input = new Input("ab");
         $parser = pair(tag("a"), tag("b"));
@@ -86,7 +86,7 @@ class SequenceTest extends TestCase
         self::assertEquals("", $remaining);
     }
 
-    public function testPairSuccessRemainder()
+    public function testPairSuccessRemainder(): void
     {
         $input = new Input("abc");
         $parser = pair(tag("a"), tag("b"));
@@ -99,7 +99,7 @@ class SequenceTest extends TestCase
         self::assertEquals("c", $remaining);
     }
 
-    public function testPairErrorFirst()
+    public function testPairErrorFirst(): void
     {
         $input = new Input("Xb");
         $parser = pair(tag("a"), tag("b"));
@@ -109,7 +109,7 @@ class SequenceTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testPairErrorSecond()
+    public function testPairErrorSecond(): void
     {
         $input = new Input("aX");
         $parser = pair(tag("a"), tag("b"));
@@ -119,7 +119,7 @@ class SequenceTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testPrecededSuccess()
+    public function testPrecededSuccess(): void
     {
         $input = new Input("ab");
         $parser = preceded(tag("a"), tag("b"));
@@ -129,7 +129,7 @@ class SequenceTest extends TestCase
         self::assertEquals("", $remaining);
     }
 
-    public function testPrecededSuccessRemainder()
+    public function testPrecededSuccessRemainder(): void
     {
         $input = new Input("abc");
         $parser = preceded(tag("a"), tag("b"));
@@ -139,7 +139,7 @@ class SequenceTest extends TestCase
         self::assertEquals("c", $remaining);
     }
 
-    public function testPrecededErrorFirst()
+    public function testPrecededErrorFirst(): void
     {
         $input = new Input("Xb");
         $parser = preceded(tag("a"), tag("b"));
@@ -149,7 +149,7 @@ class SequenceTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testPrecededErrorSecond()
+    public function testPrecededErrorSecond(): void
     {
         $input = new Input("aX");
         $parser = preceded(tag("a"), tag("b"));
@@ -159,7 +159,7 @@ class SequenceTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testSeparatedPairSuccess()
+    public function testSeparatedPairSuccess(): void
     {
         $input = new Input("a,b");
         $parser = separated_pair(tag("a"), tag(","), tag("b"));
@@ -172,7 +172,7 @@ class SequenceTest extends TestCase
         self::assertEquals("", $remaining);
     }
 
-    public function testSeparatedPairSuccessRemainder()
+    public function testSeparatedPairSuccessRemainder(): void
     {
         $input = new Input("a,bc");
         $parser = separated_pair(tag("a"), tag(","), tag("b"));
@@ -185,7 +185,7 @@ class SequenceTest extends TestCase
         self::assertEquals("c", $remaining);
     }
 
-    public function testSeparatedPairErrorFirst()
+    public function testSeparatedPairErrorFirst(): void
     {
         $input = new Input("X,b");
         $parser = separated_pair(tag("a"), tag(","), tag("b"));
@@ -195,7 +195,7 @@ class SequenceTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testSeparatedPairErrorSep()
+    public function testSeparatedPairErrorSep(): void
     {
         $input = new Input("aXb");
         $parser = separated_pair(tag("a"), tag(","), tag("b"));
@@ -205,7 +205,7 @@ class SequenceTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testSeparatedPairErrorSecond()
+    public function testSeparatedPairErrorSecond(): void
     {
         $input = new Input("a,X");
         $parser = separated_pair(tag("a"), tag(","), tag("b"));
@@ -215,7 +215,7 @@ class SequenceTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTerminatedSuccess()
+    public function testTerminatedSuccess(): void
     {
         $input = new Input("a,");
         $parser = terminated(tag("a"), tag(","));
@@ -225,7 +225,7 @@ class SequenceTest extends TestCase
         self::assertEquals("", $remaining);
     }
 
-    public function testTerminatedSuccessRemainder()
+    public function testTerminatedSuccessRemainder(): void
     {
         $input = new Input("a,b");
         $parser = terminated(tag("a"), tag(","));
@@ -235,7 +235,7 @@ class SequenceTest extends TestCase
         self::assertEquals("b", $remaining);
     }
 
-    public function testTerminatedErrorFirst()
+    public function testTerminatedErrorFirst(): void
     {
         $input = new Input("X,");
         $parser = terminated(tag("a"), tag(","));
@@ -245,7 +245,7 @@ class SequenceTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTerminatedErrorSecond()
+    public function testTerminatedErrorSecond(): void
     {
         $input = new Input("aX");
         $parser = terminated(tag("a"), tag(","));
@@ -255,7 +255,7 @@ class SequenceTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTupleSuccess()
+    public function testTupleSuccess(): void
     {
         $input = new Input("when");
         $parser = tuple(tag("w"), tag("h"), tag("e"), tag("n"));
@@ -270,7 +270,7 @@ class SequenceTest extends TestCase
         self::assertEquals("", $remaining);
     }
 
-    public function testTupleSuccessRemaining()
+    public function testTupleSuccessRemaining(): void
     {
         $input = new Input("whence");
         $parser = tuple(tag("w"), tag("h"), tag("e"), tag("n"));
@@ -285,7 +285,7 @@ class SequenceTest extends TestCase
         self::assertEquals("ce", $remaining);
     }
 
-    public function testTupleFailureFirst()
+    public function testTupleFailureFirst(): void
     {
         $input = new Input("when");
         $parser = tuple(tag("X"), tag("h"), tag("e"), tag("n"));
@@ -295,7 +295,7 @@ class SequenceTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTupleFailureSecond()
+    public function testTupleFailureSecond(): void
     {
         $input = new Input("when");
         $parser = tuple(tag("w"), tag("X"), tag("e"), tag("n"));
@@ -305,7 +305,7 @@ class SequenceTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTupleFailureThird()
+    public function testTupleFailureThird(): void
     {
         $input = new Input("when");
         $parser = tuple(tag("w"), tag("h"), tag("X"), tag("n"));
@@ -315,7 +315,7 @@ class SequenceTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testTupleFailureFourth()
+    public function testTupleFailureFourth(): void
     {
         $input = new Input("when");
         $parser = tuple(tag("w"), tag("h"), tag("e"), tag("X"));

@@ -39,47 +39,47 @@ class ErrorKind
         return new self(self::TAKE_TILL_1);
     }
 
-    public static function Permutation()
+    public static function Permutation(): self
     {
         return new self(self::PERMUTATION);
     }
 
-    public static function Alpha()
+    public static function Alpha(): self
     {
         return new self(self::ALPHA);
     }
 
-    public static function Digit()
+    public static function Digit(): self
     {
         return new self(self::DIGIT);
     }
 
-    public static function TakeWhile1()
+    public static function TakeWhile1(): self
     {
         return new self(self::TAKE_WHILE1);
     }
 
-    public static function TakeWhileMN()
+    public static function TakeWhileMN(): self
     {
         return new self(self::TAKE_WHILE_M_N);
     }
 
-    public static function IsA()
+    public static function IsA(): self
     {
         return new self(self::IS_A);
     }
 
-    public static function IsNot()
+    public static function IsNot(): self
     {
         return new self(self::IS_NOT);
     }
 
-    public static function TakeUntil()
+    public static function TakeUntil(): self
     {
         return new self(self::TAKE_UNTIL);
     }
 
-    public static function Escaped()
+    public static function Escaped(): self
     {
         return new self(self::ESCAPED);
     }

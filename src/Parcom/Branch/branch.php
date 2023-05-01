@@ -31,8 +31,7 @@ function permutation(callable ...$parsers): callable
         do {
             $matchFound = false;
             foreach ($parsers as $idx => $parser) {
-                if (isset($matchedResults[$idx])
-                    && !is_null($matchedResults[$idx])) {
+                if (isset($matchedResults[$idx])) {
                     continue;
                 } else {
                     $matchedResults[$idx] = null;

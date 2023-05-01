@@ -12,31 +12,29 @@ class Err
     public const FAILURE = "Failure";
 
     private string $variant;
-    private ?string $input;
     private ?ErrorKind $errorKind;
     private ?Needed $needed;
 
-    private function __construct(string $variant, ?Input $input, ?ErrorKind $errorKind, ?Needed $needed = null)
+    private function __construct(string $variant, ?ErrorKind $errorKind, ?Needed $needed = null)
     {
         $this->variant = $variant;
-        $this->input = $input;
         $this->errorKind = $errorKind;
         $this->needed = $needed;
     }
 
     public static function Incomplete(Needed $needed): self
     {
-        return new self(self::INCOMPLETE, null, null, $needed);
+        return new self(self::INCOMPLETE, null, $needed);
     }
 
     public static function Error(Input $input, ErrorKind $errorKind): self
     {
-        return new self(self::ERROR, $input, $errorKind);
+        return new self(self::ERROR, $errorKind);
     }
 
     public static function Failure(Input $input, ErrorKind $errorKind): self
     {
-        return new self(self::FAILURE, $input, $errorKind);
+        return new self(self::FAILURE, $errorKind);
     }
 
     public function variant(): string

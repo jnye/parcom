@@ -5,6 +5,9 @@ namespace Parcom;
 use ArrayAccess;
 use OutOfRangeException;
 
+/**
+ * @implements ArrayAccess<int, string>
+ */
 class Input implements ArrayAccess
 {
     private string $data;
@@ -28,6 +31,10 @@ class Input implements ArrayAccess
         return new self($this->data, $this->offset, $count);
     }
 
+    /**
+     * @param int $count
+     * @return self[]
+     */
     public function take_split(int $count): array
     {
         return [
@@ -62,7 +69,7 @@ class Input implements ArrayAccess
     {
         $result = $this->split_at_position($predicate);
         if ($result->is_err()) {
-            if ($result->getErr()->variant() == Err::INCOMPLETE) {
+            if ($result->getErr()?->variant() == Err::INCOMPLETE) {
                 return IResult::Ok(...$this->take_split($this->input_length()));
             }
         }
@@ -93,7 +100,7 @@ class Input implements ArrayAccess
     {
         $result = $this->split_at_position1($predicate, $errorKind);
         if ($result->is_err()) {
-            if ($result->getErr()->variant() == Err::INCOMPLETE) {
+            if ($result->getErr()?->variant() == Err::INCOMPLETE) {
                 if ($this->input_length() === 0) {
                     return IResult::Err(Err::Error($this, $errorKind));
                 } else {
@@ -113,7 +120,7 @@ class Input implements ArrayAccess
     public function offsetGet($offset): mixed
     {
         if ($offset >= $this->length) {
-            throw new OutOfRangeException($offset);
+            throw new OutOfRangeException((string) $offset);
         }
         return $this->data[$this->offset + $offset];
     }
@@ -168,12 +175,12 @@ class Input implements ArrayAccess
         return substr($this->data, $this->offset + $offset, $length);
     }
 
-    public function offset(Input $other)
+    public function offset(Input $other): int
     {
         return $other->offset - $this->offset;
     }
 
-    public function extend(string $output)
+    public function extend(string $output): void
     {
         $this->data .= $output;
         $this->length += strlen($output);

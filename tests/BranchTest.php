@@ -15,7 +15,7 @@ use function Parcom\Bytes\Complete\tag;
 class BranchTest extends TestCase
 {
 
-    public function testAltSuccessFirst()
+    public function testAltSuccessFirst(): void
     {
         $input = new Input("a");
         $parser = alt(
@@ -28,7 +28,7 @@ class BranchTest extends TestCase
         self::assertEquals("", $remaining);
     }
 
-    public function testAltSuccessSecond()
+    public function testAltSuccessSecond(): void
     {
         $input = new Input("b");
         $parser = alt(
@@ -41,7 +41,7 @@ class BranchTest extends TestCase
         self::assertEquals("", $remaining);
     }
 
-    public function testAltError()
+    public function testAltError(): void
     {
         $input = new Input("c");
         $parser = alt(
@@ -55,7 +55,7 @@ class BranchTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testPermutationSuccessInOrder()
+    public function testPermutationSuccessInOrder(): void
     {
         $input = new Input("abc123-+=");
         $parser = permutation(
@@ -73,7 +73,7 @@ class BranchTest extends TestCase
         self::assertEquals("", $remaining);
     }
 
-    public function testPermutationSuccessOutOfOrder()
+    public function testPermutationSuccessOutOfOrder(): void
     {
         $input = new Input("-+=abc123");
         $parser = permutation(
@@ -91,7 +91,7 @@ class BranchTest extends TestCase
         self::assertEquals("", $remaining);
     }
 
-    public function testPermutationErrorNoMatches()
+    public function testPermutationErrorNoMatches(): void
     {
         $input = new Input("foobar");
         $parser = permutation(
@@ -105,7 +105,7 @@ class BranchTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testPermutationErrorSomeMatches()
+    public function testPermutationErrorSomeMatches(): void
     {
         $input = new Input("123foo");
         $parser = permutation(

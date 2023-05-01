@@ -21,7 +21,7 @@ use function Parcom\Character\Streaming\digit1;
 class CharacterStreamingTest extends TestCase
 {
 
-    public function testAlpha0Success()
+    public function testAlpha0Success(): void
     {
         $input = new Input("abc1");
         [$remaining, $output, $err] = alpha0()($input);
@@ -30,7 +30,7 @@ class CharacterStreamingTest extends TestCase
         self::assertEquals("1", $remaining);
     }
 
-    public function testAlpha0SuccessRemaining()
+    public function testAlpha0SuccessRemaining(): void
     {
         $input = new Input("abc1def");
         [$remaining, $output, $err] = alpha0()($input);
@@ -39,7 +39,7 @@ class CharacterStreamingTest extends TestCase
         self::assertEquals("1def", $remaining);
     }
 
-    public function testAlpha0SuccessZero()
+    public function testAlpha0SuccessZero(): void
     {
         $input = new Input("1def");
         [$remaining, $output, $err] = alpha0()($input);
@@ -48,7 +48,7 @@ class CharacterStreamingTest extends TestCase
         self::assertEquals("1def", $remaining);
     }
 
-    public function testAlpha0Incomplete()
+    public function testAlpha0Incomplete(): void
     {
         $input = new Input("");
         [$remaining, $output, $err] = alpha0()($input);
@@ -57,7 +57,7 @@ class CharacterStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testAlpha1Success()
+    public function testAlpha1Success(): void
     {
         $input = new Input("abc1");
         [$remaining, $output, $err] = alpha1()($input);
@@ -66,7 +66,7 @@ class CharacterStreamingTest extends TestCase
         self::assertEquals("1", $remaining);
     }
 
-    public function testAlpha1SuccessRemaining()
+    public function testAlpha1SuccessRemaining(): void
     {
         $input = new Input("abc1def");
         [$remaining, $output, $err] = alpha1()($input);
@@ -75,7 +75,7 @@ class CharacterStreamingTest extends TestCase
         self::assertEquals("1def", $remaining);
     }
 
-    public function testAlpha1ErrorZero()
+    public function testAlpha1ErrorZero(): void
     {
         $input = new Input("1def");
         [$remaining, $output, $err] = alpha1()($input);
@@ -84,7 +84,7 @@ class CharacterStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testAlpha1Incomplete()
+    public function testAlpha1Incomplete(): void
     {
         $input = new Input("");
         [$remaining, $output, $err] = alpha1()($input);
@@ -93,7 +93,7 @@ class CharacterStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testDigit0Success()
+    public function testDigit0Success(): void
     {
         $input = new Input("123a");
         [$remaining, $output, $err] = digit0()($input);
@@ -102,7 +102,7 @@ class CharacterStreamingTest extends TestCase
         self::assertEquals("a", $remaining);
     }
 
-    public function testDigit0SuccessRemaining()
+    public function testDigit0SuccessRemaining(): void
     {
         $input = new Input("123a456");
         [$remaining, $output, $err] = digit0()($input);
@@ -111,7 +111,7 @@ class CharacterStreamingTest extends TestCase
         self::assertEquals("a456", $remaining);
     }
 
-    public function testDigit0SuccessZero()
+    public function testDigit0SuccessZero(): void
     {
         $input = new Input("a123");
         [$remaining, $output, $err] = digit0()($input);
@@ -120,7 +120,7 @@ class CharacterStreamingTest extends TestCase
         self::assertEquals("a123", $remaining);
     }
 
-    public function testDigit0Incomplete()
+    public function testDigit0Incomplete(): void
     {
         $input = new Input("");
         [$remaining, $output, $err] = digit0()($input);
@@ -129,7 +129,7 @@ class CharacterStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testDigit1Success()
+    public function testDigit1Success(): void
     {
         $input = new Input("123a");
         [$remaining, $output, $err] = digit1()($input);
@@ -138,7 +138,7 @@ class CharacterStreamingTest extends TestCase
         self::assertEquals("a", $remaining);
     }
 
-    public function testDigit1SuccessRemaining()
+    public function testDigit1SuccessRemaining(): void
     {
         $input = new Input("123a456");
         [$remaining, $output, $err] = digit1()($input);
@@ -147,7 +147,7 @@ class CharacterStreamingTest extends TestCase
         self::assertEquals("a456", $remaining);
     }
 
-    public function testDigit1ErrorZero()
+    public function testDigit1ErrorZero(): void
     {
         $input = new Input("a123");
         [$remaining, $output, $err] = digit1()($input);
@@ -156,7 +156,7 @@ class CharacterStreamingTest extends TestCase
         self::assertNull($remaining);
     }
 
-    public function testDigit1Incomplete()
+    public function testDigit1Incomplete(): void
     {
         $input = new Input("");
         [$remaining, $output, $err] = digit1()($input);

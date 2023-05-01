@@ -17,12 +17,12 @@ class Needed
         $this->size = $size;
     }
 
-    public static function Unknown()
+    public static function Unknown(): self
     {
         return new self(self::UNKNOWN);
     }
 
-    public static function Size(int $size)
+    public static function Size(int $size): self
     {
         return new self(self::SIZE, $size);
     }
