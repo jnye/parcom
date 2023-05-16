@@ -1,6 +1,5 @@
 {
   "name": "jnye/parcom",
-  "version": "1.0.0",
   "description": "Parser Combinator",
   "type": "library",
   "license": "MIT",
