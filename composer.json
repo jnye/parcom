@@ -1,6 +1,7 @@
 {
   "name": "jnye/parcom",
   "description": "Parser Combinator",
+  "keywords": ["parser", "lexer", "combinator", "parser combinator"],
   "type": "library",
   "license": "MIT",
   "authors": [
