@@ -1,7 +1,7 @@
 Parcom
 ======
 
-A parser combinator library for PHP 8+.
+A parser combinator library for PHP based on the Rust `nom` crate API.
 
 Installing
 ----------
